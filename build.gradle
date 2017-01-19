@@ -1,0 +1,29 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'com.cybozu.spring'
+version = '0.1.0-SNAPSHOT'
+
+repositories {
+    jcenter()
+}
+
+ext {
+    lombokVersion = '1.16.12'
+    springVersion = '4.3.5.RELEASE'
+}
+
+dependencies {
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+    testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+
+    compile group: 'org.springframework.data', name: 'spring-data-commons', version: '1.12.6.RELEASE'
+    compile group: 'org.springframework', name: 'spring-jdbc', version: springVersion
+    compile group: 'org.springframework', name: 'spring-context', version: springVersion
+    compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.0.Final'
+    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+
+    testCompile 'junit:junit:4.12'
+    testCompile group: 'org.springframework', name: 'spring-test', version: springVersion
+}
+
