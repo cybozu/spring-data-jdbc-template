@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 
 import javax.persistence.Id;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.BeansException;
@@ -25,17 +26,22 @@ import org.springframework.data.repository.query.RepositoryQuery;
 @Slf4j
 public class JdbcTemplateRepositoryFactoryBean<T extends Repository<S, ID>, S, ID extends Serializable> extends
         RepositoryFactoryBeanSupport<T, S, ID> {
-    public JdbcTemplateRepositoryFactoryBean() {
-        super();
-    }
+
+    @Setter
+    private Configuration configuration;
 
     @Override
     protected RepositoryFactorySupport createRepositoryFactory() {
-        return new JdbcTemplateRepositoryFactory();
+        return new JdbcTemplateRepositoryFactory(configuration);
     }
 
     private static class JdbcTemplateRepositoryFactory extends RepositoryFactorySupport {
         private BeanFactory beanFactory;
+        private final Configuration configuration;
+
+        private JdbcTemplateRepositoryFactory(Configuration configuration) {
+            this.configuration = configuration;
+        }
 
         @Override
         public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
@@ -50,7 +56,7 @@ public class JdbcTemplateRepositoryFactoryBean<T extends Repository<S, ID>, S, I
 
         @Override
         protected Object getTargetRepository(RepositoryInformation metadata) {
-            return new JdbcTemplateRepositoryInternal<>(beanFactory, metadata.getDomainType());
+            return new JdbcTemplateRepositoryInternal<>(beanFactory, configuration, metadata.getDomainType());
         }
 
         @Override
@@ -61,21 +67,23 @@ public class JdbcTemplateRepositoryFactoryBean<T extends Repository<S, ID>, S, I
         @Override
         protected QueryLookupStrategy getQueryLookupStrategy(QueryLookupStrategy.Key key,
                 EvaluationContextProvider evaluationContextProvider) {
-            return new JdbcTemplateQueryLookupStrategy(this.beanFactory);
+            return new JdbcTemplateQueryLookupStrategy(beanFactory, configuration);
         }
     }
 
     private static class JdbcTemplateQueryLookupStrategy implements QueryLookupStrategy {
         private final BeanFactory beanFactory;
+        private final Configuration configuration;
 
-        JdbcTemplateQueryLookupStrategy(BeanFactory beanFactory) {
+        JdbcTemplateQueryLookupStrategy(BeanFactory beanFactory, Configuration configuration) {
             this.beanFactory = beanFactory;
+            this.configuration = configuration;
         }
 
         @Override
         public RepositoryQuery resolveQuery(Method method, RepositoryMetadata metadata, ProjectionFactory factory,
                 NamedQueries namedQueries) {
-            return JdbcTemplateRepositoryQuery.create(this.beanFactory, method, metadata, factory);
+            return JdbcTemplateRepositoryQuery.create(beanFactory, configuration, method, metadata, factory);
         }
     }
 

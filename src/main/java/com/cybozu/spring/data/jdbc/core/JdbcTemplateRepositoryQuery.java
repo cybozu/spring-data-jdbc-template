@@ -21,19 +21,23 @@ import com.cybozu.spring.data.jdbc.core.annotation.Query;
 import com.cybozu.spring.data.jdbc.core.mapper.BeanEntityMapper;
 import com.cybozu.spring.data.jdbc.core.mapper.EntityMapper;
 import com.cybozu.spring.data.jdbc.core.mapper.EntityRowMapper;
+import com.cybozu.spring.data.jdbc.core.util.BeanFactoryUtil;
 
 class JdbcTemplateRepositoryQuery implements RepositoryQuery {
     private final BeanFactory beanFactory;
     private final JdbcTemplateQueryMethod queryMethod;
+    private final Configuration configuration;
 
-    static JdbcTemplateRepositoryQuery create(BeanFactory beanFactory, Method method, RepositoryMetadata metadata,
-            ProjectionFactory factory) {
+    static JdbcTemplateRepositoryQuery create(BeanFactory beanFactory, Configuration configuration, Method method,
+            RepositoryMetadata metadata, ProjectionFactory factory) {
         JdbcTemplateQueryMethod queryMethod = new JdbcTemplateQueryMethod(method, metadata, factory);
-        return new JdbcTemplateRepositoryQuery(beanFactory, queryMethod);
+        return new JdbcTemplateRepositoryQuery(beanFactory, configuration, queryMethod);
     }
 
-    private JdbcTemplateRepositoryQuery(BeanFactory beanFactory, JdbcTemplateQueryMethod queryMethod) {
+    private JdbcTemplateRepositoryQuery(BeanFactory beanFactory, Configuration configuration,
+            JdbcTemplateQueryMethod queryMethod) {
         this.beanFactory = beanFactory;
+        this.configuration = configuration;
         this.queryMethod = queryMethod;
     }
 
@@ -47,7 +51,8 @@ class JdbcTemplateRepositoryQuery implements RepositoryQuery {
 
     @Override
     public Object execute(Object[] parameters) {
-        NamedParameterJdbcOperations jdbcTemplate = beanFactory.getBean(NamedParameterJdbcOperations.class);
+        NamedParameterJdbcOperations jdbcTemplate = BeanFactoryUtil.getBeanByNameOrType(beanFactory,
+                configuration.getOperationsBeanName(), NamedParameterJdbcOperations.class);
 
         Map<String, Object> paramMap = new HashMap<>();
         for (int i = 0; i < parameters.length; i++) {

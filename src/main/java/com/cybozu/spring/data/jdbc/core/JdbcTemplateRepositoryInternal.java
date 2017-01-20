@@ -8,19 +8,23 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
+import com.cybozu.spring.data.jdbc.core.util.BeanFactoryUtil;
 import com.cybozu.spring.data.jdbc.core.util.EntityUtil;
 
 class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
     private final Class<T> domainClass;
     private final BeanFactory beanFactory;
+    private final Configuration configuration;
 
-    JdbcTemplateRepositoryInternal(BeanFactory beanFactory, Class<T> domainClass) {
-        this.domainClass = domainClass;
+    JdbcTemplateRepositoryInternal(BeanFactory beanFactory, Configuration configuration, Class<T> domainClass) {
         this.beanFactory = beanFactory;
+        this.configuration = configuration;
+        this.domainClass = domainClass;
     }
 
     private NamedParameterJdbcOperations operations() {
-        return beanFactory.getBean(NamedParameterJdbcOperations.class);
+        return BeanFactoryUtil.getBeanByNameOrType(beanFactory, configuration.getOperationsBeanName(),
+                NamedParameterJdbcOperations.class);
     }
 
     @Override

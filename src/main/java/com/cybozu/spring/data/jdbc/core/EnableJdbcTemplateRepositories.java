@@ -90,4 +90,13 @@ public @interface EnableJdbcTemplateRepositories {
      * @since 1.9
      */
     Class<?> repositoryBaseClass() default DefaultRepositoryBaseClass.class;
+
+    /**
+     * Bean name of {@link org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations} which should be used
+     * in a repository.
+     * If not specified, the bean is looked up by the Class.
+     *
+     * @return bean name
+     */
+    String namedParameterJdbcOperationsBeanName() default "";
 }

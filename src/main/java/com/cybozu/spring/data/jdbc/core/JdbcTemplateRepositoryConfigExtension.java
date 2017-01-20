@@ -1,6 +1,8 @@
 package com.cybozu.spring.data.jdbc.core;
 
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport;
+import org.springframework.data.repository.config.RepositoryConfigurationSource;
 
 public class JdbcTemplateRepositoryConfigExtension extends RepositoryConfigurationExtensionSupport {
     @Override
@@ -11,5 +13,13 @@ public class JdbcTemplateRepositoryConfigExtension extends RepositoryConfigurati
     @Override
     public String getRepositoryFactoryClassName() {
         return JdbcTemplateRepositoryFactoryBean.class.getName();
+    }
+
+    @Override
+    public void postProcess(BeanDefinitionBuilder builder, RepositoryConfigurationSource source) {
+        super.postProcess(builder, source);
+
+        builder.addPropertyValue("configuration",
+                Configuration.create(source.getAttribute("namedParameterJdbcOperationsBeanName")));
     }
 }
