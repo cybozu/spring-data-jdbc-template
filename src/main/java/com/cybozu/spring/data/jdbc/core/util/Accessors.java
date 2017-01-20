@@ -62,11 +62,13 @@ final class Accessors {
 
         @Override
         public Object getValue(Object target) {
+            ReflectionUtils.makeAccessible(propertyDescriptor.getReadMethod());
             return ReflectionUtils.invokeMethod(propertyDescriptor.getReadMethod(), target);
         }
 
         @Override
         public void setValue(Object target, Object value) {
+            ReflectionUtils.makeAccessible(propertyDescriptor.getWriteMethod());
             ReflectionUtils.invokeMethod(propertyDescriptor.getWriteMethod(), target, value);
         }
     }
@@ -95,11 +97,13 @@ final class Accessors {
 
         @Override
         public Object getValue(Object target) {
+            ReflectionUtils.makeAccessible(field);
             return ReflectionUtils.getField(field, target);
         }
 
         @Override
         public void setValue(Object target, Object value) {
+            ReflectionUtils.makeAccessible(field);
             ReflectionUtils.setField(field, target, value);
         }
     }
