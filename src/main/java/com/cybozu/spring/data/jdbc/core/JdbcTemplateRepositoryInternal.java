@@ -37,14 +37,18 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
         jdbcInsert.execute(values);
     }
 
-    @Override
-    public void update(T entity) {
+    static <U> String generateUpdateQuery(Class<U> domainClass) {
         String tableName = EntityUtil.tableName(domainClass);
         String setClause = EntityUtil.columnNamesExceptKeys(domainClass).stream().map(c -> c + " = :" + c)
                 .collect(Collectors.joining(" , "));
         String keyClause = EntityUtil.keyNames(domainClass).stream().map(k -> k + " = :" + k)
                 .collect(Collectors.joining(" AND "));
-        String query = "UPDATE " + tableName + " SET " + setClause + " WHERE " + keyClause;
+        return  "UPDATE " + tableName + " SET " + setClause + " WHERE " + keyClause;
+    }
+
+    @Override
+    public void update(T entity) {
+        String query = generateUpdateQuery(domainClass);
         Map<String, Object> values = EntityUtil.values(entity, domainClass, true);
         operations().update(query, values);
     }
