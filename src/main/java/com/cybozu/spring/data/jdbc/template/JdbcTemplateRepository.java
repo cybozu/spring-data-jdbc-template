@@ -5,14 +5,15 @@ import java.io.Serializable;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 
-import com.cybozu.spring.data.jdbc.template.JdbcTemplateRepository.IdPlaceHolder;
+import com.cybozu.spring.data.jdbc.template.JdbcTemplateRepository.IdPlaceholder;
 
 @NoRepositoryBean
-public interface JdbcTemplateRepository<T> extends Repository<T, IdPlaceHolder> {
+public interface JdbcTemplateRepository<T> extends Repository<T, IdPlaceholder> {
     void insert(T entity);
 
     void update(T entity);
 
-    interface IdPlaceHolder extends Serializable {
+    // We don't use CrudRepository. Thus ID type is not required.
+    interface IdPlaceholder extends Serializable {
     }
 }
