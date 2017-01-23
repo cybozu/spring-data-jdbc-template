@@ -19,6 +19,31 @@ public class PropertyAccessorTest {
         @Column
         private String field1;
 
+        @Column
+        public Long getField2() {
+            return 42L;
+        }
+
+        public void setField2(Long l) {
+        }
+
+        public boolean getField3() {
+            return true;
+        }
+
+        @Column
+        public void setField3(boolean b) {
+        }
+
+        @Column(name = "get")
+        public int getField4() {
+            return 1;
+        }
+
+        @Column(name = "set")
+        public void setField4(int i) {
+        }
+
         @Getter
         @Setter
         private transient String transientField;
@@ -41,6 +66,9 @@ public class PropertyAccessorTest {
     @Test
     public void testGetAnnotation() throws Exception {
         assertThat(propertyAccessor("field1").getAnnotation(Column.class)).isNotNull().isInstanceOf(Column.class);
+        assertThat(propertyAccessor("field2").getAnnotation(Column.class)).isNotNull().isInstanceOf(Column.class);
+        assertThat(propertyAccessor("field3").getAnnotation(Column.class)).isNotNull().isInstanceOf(Column.class);
+        assertThat(propertyAccessor("field4").getAnnotation(Column.class).name()).isEqualTo("get");
     }
 
     @Test
