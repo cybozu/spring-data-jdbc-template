@@ -1,4 +1,4 @@
-package com.cybozu.spring.data.jdbc.core.mapper;
+package com.cybozu.spring.data.jdbc.template.mapper;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

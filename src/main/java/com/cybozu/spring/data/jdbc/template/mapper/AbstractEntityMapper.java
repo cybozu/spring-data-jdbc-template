@@ -1,4 +1,4 @@
-package com.cybozu.spring.data.jdbc.core.mapper;
+package com.cybozu.spring.data.jdbc.template.mapper;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,8 +10,8 @@ import lombok.Getter;
 
 import org.springframework.beans.BeanUtils;
 
-import com.cybozu.spring.data.jdbc.core.util.Accessor;
-import com.cybozu.spring.data.jdbc.core.util.EntityUtil;
+import com.cybozu.spring.data.jdbc.template.util.Accessor;
+import com.cybozu.spring.data.jdbc.template.util.EntityUtil;
 
 public abstract class AbstractEntityMapper<T> implements EntityMapper<T> {
     @Getter(AccessLevel.PROTECTED)

@@ -1,4 +1,4 @@
-package com.cybozu.spring.data.jdbc.core.mapper;
+package com.cybozu.spring.data.jdbc.template.mapper;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -6,8 +6,8 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import com.cybozu.spring.data.jdbc.core.util.Accessor;
-import com.cybozu.spring.data.jdbc.core.util.EntityUtil;
+import com.cybozu.spring.data.jdbc.template.util.Accessor;
+import com.cybozu.spring.data.jdbc.template.util.EntityUtil;
 
 public class BeanEntityMapper<T> extends AbstractEntityMapper<T> {
     private Map<String, Accessor> columnToAccessor;

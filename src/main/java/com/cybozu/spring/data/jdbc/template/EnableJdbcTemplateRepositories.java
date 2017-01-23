@@ -1,4 +1,4 @@
-package com.cybozu.spring.data.jdbc.core;
+package com.cybozu.spring.data.jdbc.template;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

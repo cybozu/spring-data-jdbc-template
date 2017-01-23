@@ -1,4 +1,4 @@
-package com.cybozu.spring.data.jdbc.core.util;
+package com.cybozu.spring.data.jdbc.template.util;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;

@@ -1,4 +1,4 @@
-package com.cybozu.spring.data.jdbc.core;
+package com.cybozu.spring.data.jdbc.template;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -15,13 +15,13 @@ import org.springframework.data.repository.query.RepositoryQuery;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 
-import com.cybozu.spring.data.jdbc.core.annotation.Mapper;
-import com.cybozu.spring.data.jdbc.core.annotation.Modifying;
-import com.cybozu.spring.data.jdbc.core.annotation.Query;
-import com.cybozu.spring.data.jdbc.core.mapper.BeanEntityMapper;
-import com.cybozu.spring.data.jdbc.core.mapper.EntityMapper;
-import com.cybozu.spring.data.jdbc.core.mapper.EntityRowMapper;
-import com.cybozu.spring.data.jdbc.core.util.BeanFactoryUtil;
+import com.cybozu.spring.data.jdbc.template.annotation.Mapper;
+import com.cybozu.spring.data.jdbc.template.annotation.Modifying;
+import com.cybozu.spring.data.jdbc.template.annotation.Query;
+import com.cybozu.spring.data.jdbc.template.mapper.BeanEntityMapper;
+import com.cybozu.spring.data.jdbc.template.mapper.EntityMapper;
+import com.cybozu.spring.data.jdbc.template.mapper.EntityRowMapper;
+import com.cybozu.spring.data.jdbc.template.util.BeanFactoryUtil;
 
 class JdbcTemplateRepositoryQuery implements RepositoryQuery {
     private final BeanFactory beanFactory;

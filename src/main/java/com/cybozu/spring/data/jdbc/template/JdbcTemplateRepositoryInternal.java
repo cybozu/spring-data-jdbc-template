@@ -1,4 +1,4 @@
-package com.cybozu.spring.data.jdbc.core;
+package com.cybozu.spring.data.jdbc.template;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -8,8 +8,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
-import com.cybozu.spring.data.jdbc.core.util.BeanFactoryUtil;
-import com.cybozu.spring.data.jdbc.core.util.EntityUtil;
+import com.cybozu.spring.data.jdbc.template.util.BeanFactoryUtil;
+import com.cybozu.spring.data.jdbc.template.util.EntityUtil;
 
 class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
     private final Class<T> domainClass;

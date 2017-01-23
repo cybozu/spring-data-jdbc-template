@@ -15,4 +15,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'spring-data-jdbc-core'
+rootProject.name = 'spring-data-jdbc-template'

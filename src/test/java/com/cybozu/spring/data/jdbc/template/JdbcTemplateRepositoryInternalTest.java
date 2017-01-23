@@ -1,4 +1,4 @@
-package com.cybozu.spring.data.jdbc.core;
+package com.cybozu.spring.data.jdbc.template;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
