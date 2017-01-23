@@ -6,7 +6,6 @@ import java.util.Map;
 
 import lombok.Getter;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.repository.core.RepositoryMetadata;
@@ -18,7 +17,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import com.cybozu.spring.data.jdbc.template.annotation.Mapper;
 import com.cybozu.spring.data.jdbc.template.annotation.Modifying;
 import com.cybozu.spring.data.jdbc.template.annotation.Query;
-import com.cybozu.spring.data.jdbc.template.mapper.BeanEntityMapper;
 import com.cybozu.spring.data.jdbc.template.mapper.EntityMapper;
 import com.cybozu.spring.data.jdbc.template.mapper.EntityRowMapper;
 import com.cybozu.spring.data.jdbc.template.util.BeanFactoryUtil;
@@ -71,7 +69,6 @@ class JdbcTemplateRepositoryQuery implements RepositoryQuery {
 
     @SuppressWarnings("unchecked")
     private <S> RowMapper<S> getRowMapper(JdbcTemplateQueryMethod queryMethod, Class<S> resultType) {
-        EntityMapper<S> entityMapper;
         Class<? extends EntityMapper<?>> mapperClass = null;
 
         if (queryMethod.mapperClass != null) {
@@ -80,13 +77,7 @@ class JdbcTemplateRepositoryQuery implements RepositoryQuery {
             Mapper mapping = resultType.getAnnotation(Mapper.class);
             mapperClass = mapping.value();
         }
-        if (mapperClass == null) {
-            entityMapper = (EntityMapper<S>) new BeanEntityMapper();
-        } else {
-            entityMapper = (EntityMapper<S>) BeanUtils.instantiate(mapperClass);
-        }
-        entityMapper.initialize(resultType);
-        return new EntityRowMapper<>(entityMapper);
+        return EntityRowMapper.create(resultType, mapperClass);
     }
 
     @Override
