@@ -53,14 +53,14 @@ public class EntityUtil {
     private static List<Accessor> getPropertyAccessors(Class<?> klass) {
         return Arrays.stream(BeanUtils.getPropertyDescriptors(klass)).filter(pd -> !isObjectMethod(pd.getReadMethod()))
                 .map(pd -> Accessors.ofProperty(klass, pd))
-                .filter(accessor -> accessor.getAnnotation(Transient.class) == null).collect(Collectors.toList());
+                .filter(accessor -> accessor.getAnnotation(Transient.class) == null && !accessor.isTransient())
+                .collect(Collectors.toList());
     }
 
     private static List<Accessor> getFieldAccessors(Class<?> klass) {
-        return Arrays.stream(klass.getFields()).filter(f -> {
-            int modifiers = f.getModifiers();
-            return !Modifier.isStatic(modifiers) && !Modifier.isTransient(modifiers);
-        }).map(Accessors::ofField).filter(accessor -> accessor.getAnnotation(Transient.class) == null)
+        return Arrays.stream(klass.getFields()).filter(f -> !Modifier.isStatic(f.getModifiers()))
+                .map(Accessors::ofField)
+                .filter(accessor -> accessor.getAnnotation(Transient.class) == null && !accessor.isTransient())
                 .collect(Collectors.toList());
     }
 

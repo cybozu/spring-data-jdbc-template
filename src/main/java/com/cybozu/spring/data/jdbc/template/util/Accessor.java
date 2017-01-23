@@ -12,4 +12,6 @@ public interface Accessor {
     Object getValue(Object target);
 
     void setValue(Object target, Object value);
+
+    boolean isTransient();
 }

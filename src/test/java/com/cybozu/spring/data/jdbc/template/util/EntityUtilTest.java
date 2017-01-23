@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +39,53 @@ public class EntityUtilTest {
 
         @Column
         public boolean field4;
+
+        @Column(name = "field_5")
+        public double getField5() {
+            return 0.0;
+        }
+
+        public void setField5(double d) {
+
+        }
+
+        public Number getField6() {
+            return 6;
+        }
+
+        @Column(name = "field_6")
+        public void setField6(Number n) {
+
+        }
+
+        @Getter
+        @Setter
+        @Transient
+        private String transient1;
+
+        @Getter
+        @Setter
+        private transient String transient2;
+
+        public transient String transient3;
+
+        @Transient
+        public String getTransient4() {
+            return "";
+        }
+
+        public void setTransient4(String s) {
+
+        }
+
+        public String getTransient5() {
+            return "";
+        }
+
+        @Transient
+        public void setTransient5(String s) {
+
+        }
     }
 
     private static class TestEntity2 {
@@ -82,7 +130,7 @@ public class EntityUtilTest {
     public void testGetAccessors() throws Exception {
         List<Accessor> accessors = EntityUtil.getAccessors(TestEntity.class);
         assertThat(accessors).extracting(a -> a.getName()).containsExactlyInAnyOrder("field1", "field2", "field3",
-                "field4");
+                "field4", "field5", "field6");
     }
 
     @Test
@@ -94,12 +142,13 @@ public class EntityUtilTest {
     @Test
     public void testColumnNames() {
         assertThat(EntityUtil.columnNames(TestEntity.class)).containsExactlyInAnyOrder("field_1", "field_2", "field3",
-                "field4");
+                "field4", "field_5", "field_6");
     }
 
     @Test
     public void testColumnNamesExceptKeys() {
-        assertThat(EntityUtil.columnNamesExceptKeys(TestEntity.class)).containsExactlyInAnyOrder("field_1", "field4");
+        assertThat(EntityUtil.columnNamesExceptKeys(TestEntity.class)).containsExactlyInAnyOrder("field_1", "field4",
+                "field_5", "field_6");
     }
 
     @Test
@@ -113,7 +162,7 @@ public class EntityUtilTest {
         Map<String, Object> values = EntityUtil.values(entity, TestEntity.class, true);
 
         assertThat(values).containsOnly(entry("field_1", "FIELD_1"), entry("field_2", 2), entry("field3", 3L),
-                entry("field4", true));
+                entry("field4", true), entry("field_5", 0.0), entry("field_6", 6));
     }
 
     @Test
@@ -125,6 +174,7 @@ public class EntityUtilTest {
         entity.field4 = true;
 
         Map<String, Object> values = EntityUtil.values(entity, TestEntity.class, false);
-        assertThat(values).containsOnly(entry("field_1", "FIELD_1"), entry("field3", 3L), entry("field4", true));
+        assertThat(values).containsOnly(entry("field_1", "FIELD_1"), entry("field3", 3L), entry("field4", true),
+                entry("field_5", 0.0), entry("field_6", 6));
     }
 }

@@ -4,6 +4,9 @@ import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
+import javax.annotation.Nullable;
 
 import org.springframework.util.ReflectionUtils;
 
@@ -40,6 +43,7 @@ final class Accessors {
         }
 
         @Override
+        @Nullable
         public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
             A result;
 
@@ -55,9 +59,20 @@ final class Accessors {
                 return result;
             }
 
+            Field f = fieldInBack();
+            if (f != null) {
+                result = f.getAnnotation(annotationClass);
+                return result;
+            }
+            return null;
+        }
+
+        private @Nullable Field fieldInBack() {
             Field f = ReflectionUtils.findField(klass, propertyDescriptor.getName());
-            result = f.getAnnotation(annotationClass);
-            return result;
+            if (f != null && propertyDescriptor.getReadMethod().getReturnType().isAssignableFrom(f.getType())) {
+                return f;
+            }
+            return null;
         }
 
         @Override
@@ -70,6 +85,12 @@ final class Accessors {
         public void setValue(Object target, Object value) {
             ReflectionUtils.makeAccessible(propertyDescriptor.getWriteMethod());
             ReflectionUtils.invokeMethod(propertyDescriptor.getWriteMethod(), target, value);
+        }
+
+        @Override
+        public boolean isTransient() {
+            Field field = fieldInBack();
+            return field != null && Modifier.isTransient(field.getModifiers());
         }
     }
 
@@ -105,6 +126,11 @@ final class Accessors {
         public void setValue(Object target, Object value) {
             ReflectionUtils.makeAccessible(field);
             ReflectionUtils.setField(field, target, value);
+        }
+
+        @Override
+        public boolean isTransient() {
+            return Modifier.isTransient(field.getModifiers());
         }
     }
 }

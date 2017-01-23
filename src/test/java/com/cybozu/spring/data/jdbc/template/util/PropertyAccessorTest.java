@@ -18,6 +18,10 @@ public class PropertyAccessorTest {
         @Setter
         @Column
         private String field1;
+
+        @Getter
+        @Setter
+        private transient String transientField;
     }
 
     private Accessor propertyAccessor(String name) throws IntrospectionException {
@@ -51,5 +55,11 @@ public class PropertyAccessorTest {
         TestEntity entity = new TestEntity();
         propertyAccessor("field1").setValue(entity, "test");
         assertThat(entity.getField1()).isEqualTo("test");
+    }
+
+    @Test
+    public void testIsTransient() throws Exception {
+        assertThat(propertyAccessor("field1").isTransient()).isFalse();
+        assertThat(propertyAccessor("transientField").isTransient()).isTrue();
     }
 }

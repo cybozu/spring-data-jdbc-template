@@ -10,10 +10,12 @@ public class FieldAccessorTest {
     private static class TestEntity {
         @Column
         public String field1;
+
+        public transient String transientField;
     }
 
     private Accessor fieldAccessor(String name) throws NoSuchFieldException {
-        return Accessors.ofField(TestEntity.class.getField("field1"));
+        return Accessors.ofField(TestEntity.class.getField(name));
     }
 
     @Test
@@ -44,4 +46,11 @@ public class FieldAccessorTest {
         fieldAccessor("field1").setValue(entity, "test");
         assertThat(entity.field1).isEqualTo("test");
     }
+
+    @Test
+    public void testIsTransient() throws Exception {
+        assertThat(fieldAccessor("field1").isTransient()).isFalse();
+        assertThat(fieldAccessor("transientField").isTransient()).isTrue();
+    }
+
 }
