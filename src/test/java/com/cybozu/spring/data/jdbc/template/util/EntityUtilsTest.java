@@ -49,12 +49,12 @@ public class EntityUtilsTest {
 
         }
 
-        public Number getField6() {
-            return 6;
+        public byte[] getField6() {
+            return new byte[] { 1, 2, 3 };
         }
 
         @Column(name = "field_6")
-        public void setField6(Number n) {
+        public void setField6(byte[] ary) {
 
         }
 
@@ -162,7 +162,7 @@ public class EntityUtilsTest {
         Map<String, Object> values = EntityUtils.values(entity, TestEntity.class, true);
 
         assertThat(values).containsOnly(entry("field_1", "FIELD_1"), entry("field_2", 2), entry("field3", 3L),
-                entry("field4", true), entry("field_5", 0.0), entry("field_6", 6));
+                entry("field4", true), entry("field_5", 0.0), entry("field_6", new byte[] { 1, 2, 3 }));
     }
 
     @Test
@@ -175,6 +175,6 @@ public class EntityUtilsTest {
 
         Map<String, Object> values = EntityUtils.values(entity, TestEntity.class, false);
         assertThat(values).containsOnly(entry("field_1", "FIELD_1"), entry("field3", 3L), entry("field4", true),
-                entry("field_5", 0.0), entry("field_6", 6));
+                entry("field_5", 0.0), entry("field_6", new byte[] { 1, 2, 3 }));
     }
 }
