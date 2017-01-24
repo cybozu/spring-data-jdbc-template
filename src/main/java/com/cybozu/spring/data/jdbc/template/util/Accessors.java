@@ -69,7 +69,8 @@ final class Accessors {
 
         private @Nullable Field fieldInBack() {
             Field f = ReflectionUtils.findField(klass, propertyDescriptor.getName());
-            if (f != null && propertyDescriptor.getReadMethod().getReturnType().isAssignableFrom(f.getType())) {
+            Method readMethod = propertyDescriptor.getReadMethod();
+            if (f != null && readMethod != null && readMethod.getReturnType().isAssignableFrom(f.getType())) {
                 return f;
             }
             return null;
