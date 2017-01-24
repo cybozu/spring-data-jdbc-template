@@ -22,7 +22,6 @@ public abstract class AbstractEntityMapper<T> implements EntityMapper<T> {
 
     @Override
     public void initialize(Class<T> mappedClass) {
-        EntityMapper.super.initialize(mappedClass);
         this.mappedClass = mappedClass;
         this.accessors = Collections.unmodifiableList(EntityUtils.getAccessors(mappedClass));
     }
