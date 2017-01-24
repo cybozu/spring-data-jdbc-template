@@ -14,9 +14,10 @@ import com.cybozu.spring.data.jdbc.template.util.EntityUtil;
 class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
     private final Class<T> domainClass;
     private final BeanFactory beanFactory;
-    private final Configuration configuration;
+    private final JdbcTemplateRepositoryConfiguration configuration;
 
-    JdbcTemplateRepositoryInternal(BeanFactory beanFactory, Configuration configuration, Class<T> domainClass) {
+    JdbcTemplateRepositoryInternal(BeanFactory beanFactory, JdbcTemplateRepositoryConfiguration configuration,
+            Class<T> domainClass) {
         this.beanFactory = beanFactory;
         this.configuration = configuration;
         this.domainClass = domainClass;
@@ -43,7 +44,7 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
                 .collect(Collectors.joining(" , "));
         String keyClause = EntityUtil.keyNames(domainClass).stream().map(k -> k + " = :" + k)
                 .collect(Collectors.joining(" AND "));
-        return  "UPDATE " + tableName + " SET " + setClause + " WHERE " + keyClause;
+        return "UPDATE " + tableName + " SET " + setClause + " WHERE " + keyClause;
     }
 
     @Override

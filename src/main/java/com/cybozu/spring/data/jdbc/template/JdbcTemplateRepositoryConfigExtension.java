@@ -20,6 +20,6 @@ public class JdbcTemplateRepositoryConfigExtension extends RepositoryConfigurati
         super.postProcess(builder, source);
 
         builder.addPropertyValue("configuration",
-                Configuration.create(source.getAttribute("namedParameterJdbcOperationsBeanName")));
+                JdbcTemplateRepositoryConfiguration.create(source.getAttribute("namedParameterJdbcOperationsBeanName")));
     }
 }

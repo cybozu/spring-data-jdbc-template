@@ -28,7 +28,7 @@ public class JdbcTemplateRepositoryFactoryBean<T extends Repository<S, ID>, S, I
         RepositoryFactoryBeanSupport<T, S, ID> {
 
     @Setter
-    private Configuration configuration;
+    private JdbcTemplateRepositoryConfiguration configuration;
 
     @Override
     protected RepositoryFactorySupport createRepositoryFactory() {
@@ -37,9 +37,9 @@ public class JdbcTemplateRepositoryFactoryBean<T extends Repository<S, ID>, S, I
 
     private static class JdbcTemplateRepositoryFactory extends RepositoryFactorySupport {
         private BeanFactory beanFactory;
-        private final Configuration configuration;
+        private final JdbcTemplateRepositoryConfiguration configuration;
 
-        private JdbcTemplateRepositoryFactory(Configuration configuration) {
+        private JdbcTemplateRepositoryFactory(JdbcTemplateRepositoryConfiguration configuration) {
             this.configuration = configuration;
         }
 
@@ -73,9 +73,9 @@ public class JdbcTemplateRepositoryFactoryBean<T extends Repository<S, ID>, S, I
 
     private static class JdbcTemplateQueryLookupStrategy implements QueryLookupStrategy {
         private final BeanFactory beanFactory;
-        private final Configuration configuration;
+        private final JdbcTemplateRepositoryConfiguration configuration;
 
-        JdbcTemplateQueryLookupStrategy(BeanFactory beanFactory, Configuration configuration) {
+        JdbcTemplateQueryLookupStrategy(BeanFactory beanFactory, JdbcTemplateRepositoryConfiguration configuration) {
             this.beanFactory = beanFactory;
             this.configuration = configuration;
         }

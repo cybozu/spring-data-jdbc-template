@@ -24,15 +24,16 @@ import com.cybozu.spring.data.jdbc.template.util.BeanFactoryUtil;
 class JdbcTemplateRepositoryQuery implements RepositoryQuery {
     private final BeanFactory beanFactory;
     private final JdbcTemplateQueryMethod queryMethod;
-    private final Configuration configuration;
+    private final JdbcTemplateRepositoryConfiguration configuration;
 
-    static JdbcTemplateRepositoryQuery create(BeanFactory beanFactory, Configuration configuration, Method method,
-            RepositoryMetadata metadata, ProjectionFactory factory) {
+    static JdbcTemplateRepositoryQuery create(BeanFactory beanFactory,
+            JdbcTemplateRepositoryConfiguration configuration, Method method, RepositoryMetadata metadata,
+            ProjectionFactory factory) {
         JdbcTemplateQueryMethod queryMethod = new JdbcTemplateQueryMethod(method, metadata, factory);
         return new JdbcTemplateRepositoryQuery(beanFactory, configuration, queryMethod);
     }
 
-    private JdbcTemplateRepositoryQuery(BeanFactory beanFactory, Configuration configuration,
+    private JdbcTemplateRepositoryQuery(BeanFactory beanFactory, JdbcTemplateRepositoryConfiguration configuration,
             JdbcTemplateQueryMethod queryMethod) {
         this.beanFactory = beanFactory;
         this.configuration = configuration;
