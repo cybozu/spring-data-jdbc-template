@@ -7,7 +7,8 @@ import javax.annotation.Nonnull;
 /**
  * Classes which implements this class must have no-arg constructor.
  *
- * @param <T> a type which this class maps
+ * @param <T>
+ *            a type which this class maps
  */
 public interface EntityMapper<T> {
     default void initialize(Class<T> mappedClass) {
@@ -24,8 +25,9 @@ public interface EntityMapper<T> {
     }
 
     /**
+     * Returns a map. Keys of the map are column names of the entity. Values of the map are Java types of the column.
      * 
-     * @return a Map whose key is a column name and values is a type of the property.
+     * @return a map.
      */
     Map<String, Class<?>> types();
 }
