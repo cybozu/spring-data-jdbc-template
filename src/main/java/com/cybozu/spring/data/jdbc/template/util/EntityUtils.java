@@ -22,8 +22,8 @@ import javax.persistence.Transient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ReflectionUtils;
 
-public class EntityUtil {
-    private EntityUtil() {
+public class EntityUtils {
+    private EntityUtils() {
         throw new AssertionError();
     }
 

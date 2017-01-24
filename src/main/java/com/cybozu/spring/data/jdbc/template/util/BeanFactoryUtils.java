@@ -3,8 +3,8 @@ package com.cybozu.spring.data.jdbc.template.util;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.util.StringUtils;
 
-public final class BeanFactoryUtil {
-    private BeanFactoryUtil() {
+public final class BeanFactoryUtils {
+    private BeanFactoryUtils() {
         throw new AssertionError();
     }
 

@@ -19,7 +19,7 @@ import com.cybozu.spring.data.jdbc.template.annotation.Modifying;
 import com.cybozu.spring.data.jdbc.template.annotation.Query;
 import com.cybozu.spring.data.jdbc.template.mapper.EntityMapper;
 import com.cybozu.spring.data.jdbc.template.mapper.EntityRowMapper;
-import com.cybozu.spring.data.jdbc.template.util.BeanFactoryUtil;
+import com.cybozu.spring.data.jdbc.template.util.BeanFactoryUtils;
 
 class JdbcTemplateRepositoryQuery implements RepositoryQuery {
     private final BeanFactory beanFactory;
@@ -50,7 +50,7 @@ class JdbcTemplateRepositoryQuery implements RepositoryQuery {
 
     @Override
     public Object execute(Object[] parameters) {
-        NamedParameterJdbcOperations jdbcTemplate = BeanFactoryUtil.getBeanByNameOrType(beanFactory,
+        NamedParameterJdbcOperations jdbcTemplate = BeanFactoryUtils.getBeanByNameOrType(beanFactory,
                 configuration.getOperationsBeanName(), NamedParameterJdbcOperations.class);
 
         Map<String, Object> paramMap = new HashMap<>();

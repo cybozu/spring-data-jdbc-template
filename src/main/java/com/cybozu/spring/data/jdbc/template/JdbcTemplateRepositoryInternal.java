@@ -8,8 +8,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
-import com.cybozu.spring.data.jdbc.template.util.BeanFactoryUtil;
-import com.cybozu.spring.data.jdbc.template.util.EntityUtil;
+import com.cybozu.spring.data.jdbc.template.util.BeanFactoryUtils;
+import com.cybozu.spring.data.jdbc.template.util.EntityUtils;
 
 class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
     private final Class<T> domainClass;
@@ -24,7 +24,7 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
     }
 
     private NamedParameterJdbcOperations operations() {
-        return BeanFactoryUtil.getBeanByNameOrType(beanFactory, configuration.getOperationsBeanName(),
+        return BeanFactoryUtils.getBeanByNameOrType(beanFactory, configuration.getOperationsBeanName(),
                 NamedParameterJdbcOperations.class);
     }
 
@@ -33,16 +33,16 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
         JdbcTemplate jdbcTemplate = (JdbcTemplate) operations().getJdbcOperations();
 
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName(EntityUtil.tableName(domainClass));
-        Map<String, Object> values = EntityUtil.values(entity, domainClass, false);
+        jdbcInsert.withTableName(EntityUtils.tableName(domainClass));
+        Map<String, Object> values = EntityUtils.values(entity, domainClass, false);
         jdbcInsert.execute(values);
     }
 
     static <U> String generateUpdateQuery(Class<U> domainClass) {
-        String tableName = EntityUtil.tableName(domainClass);
-        String setClause = EntityUtil.columnNamesExceptKeys(domainClass).stream().map(c -> c + " = :" + c)
+        String tableName = EntityUtils.tableName(domainClass);
+        String setClause = EntityUtils.columnNamesExceptKeys(domainClass).stream().map(c -> c + " = :" + c)
                 .collect(Collectors.joining(" , "));
-        String keyClause = EntityUtil.keyNames(domainClass).stream().map(k -> k + " = :" + k)
+        String keyClause = EntityUtils.keyNames(domainClass).stream().map(k -> k + " = :" + k)
                 .collect(Collectors.joining(" AND "));
         return "UPDATE " + tableName + " SET " + setClause + " WHERE " + keyClause;
     }
@@ -50,7 +50,7 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
     @Override
     public void update(T entity) {
         String query = generateUpdateQuery(domainClass);
-        Map<String, Object> values = EntityUtil.values(entity, domainClass, true);
+        Map<String, Object> values = EntityUtils.values(entity, domainClass, true);
         operations().update(query, values);
     }
 }

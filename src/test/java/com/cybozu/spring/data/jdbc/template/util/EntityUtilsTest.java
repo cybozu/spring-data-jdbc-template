@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class EntityUtilTest {
+public class EntityUtilsTest {
 
     @Table(name = "test_table")
     private static class TestEntity {
@@ -98,56 +98,56 @@ public class EntityUtilTest {
 
     @Test
     public void testColumnNameForPropertyWithColumn() throws Exception {
-        assertThat(EntityUtil.columnName(propertyAccessor("field1"))).isEqualTo("field_1");
+        assertThat(EntityUtils.columnName(propertyAccessor("field1"))).isEqualTo("field_1");
     }
 
     @Test
     public void testColumnNameForFieldWithColumn() throws Exception {
-        assertThat(EntityUtil.columnName(Accessors.ofField(TestEntity.class.getField("field2")))).isEqualTo("field_2");
+        assertThat(EntityUtils.columnName(Accessors.ofField(TestEntity.class.getField("field2")))).isEqualTo("field_2");
     }
 
     @Test
     public void testColumnNameForPropertyWithoutColumn() throws Exception {
-        assertThat(EntityUtil.columnName(propertyAccessor("field3"))).isEqualTo("field3");
+        assertThat(EntityUtils.columnName(propertyAccessor("field3"))).isEqualTo("field3");
     }
 
     @Test
     public void testColumnNameForFieldWithoutColumnNameAttr() throws Exception {
-        assertThat(EntityUtil.columnName(Accessors.ofField(TestEntity.class.getField("field4")))).isEqualTo("field4");
+        assertThat(EntityUtils.columnName(Accessors.ofField(TestEntity.class.getField("field4")))).isEqualTo("field4");
     }
 
     @Test
     public void testTableNameWithTableAnnotation() throws Exception {
-        assertThat(EntityUtil.tableName(TestEntity.class)).isEqualTo("test_table");
+        assertThat(EntityUtils.tableName(TestEntity.class)).isEqualTo("test_table");
     }
 
     @Test
     public void testTableNameWithoutTableAnnotation() throws Exception {
-        assertThat(EntityUtil.tableName(TestEntity2.class)).isEqualTo("TestEntity2");
+        assertThat(EntityUtils.tableName(TestEntity2.class)).isEqualTo("TestEntity2");
     }
 
     @Test
     public void testGetAccessors() throws Exception {
-        List<Accessor> accessors = EntityUtil.getAccessors(TestEntity.class);
+        List<Accessor> accessors = EntityUtils.getAccessors(TestEntity.class);
         assertThat(accessors).extracting(a -> a.getName()).containsExactlyInAnyOrder("field1", "field2", "field3",
                 "field4", "field5", "field6");
     }
 
     @Test
     public void testKeyNames() {
-        List<String> keyNames = EntityUtil.keyNames(TestEntity.class);
+        List<String> keyNames = EntityUtils.keyNames(TestEntity.class);
         assertThat(keyNames).containsExactlyInAnyOrder("field_2", "field3");
     }
 
     @Test
     public void testColumnNames() {
-        assertThat(EntityUtil.columnNames(TestEntity.class)).containsExactlyInAnyOrder("field_1", "field_2", "field3",
+        assertThat(EntityUtils.columnNames(TestEntity.class)).containsExactlyInAnyOrder("field_1", "field_2", "field3",
                 "field4", "field_5", "field_6");
     }
 
     @Test
     public void testColumnNamesExceptKeys() {
-        assertThat(EntityUtil.columnNamesExceptKeys(TestEntity.class)).containsExactlyInAnyOrder("field_1", "field4",
+        assertThat(EntityUtils.columnNamesExceptKeys(TestEntity.class)).containsExactlyInAnyOrder("field_1", "field4",
                 "field_5", "field_6");
     }
 
@@ -159,7 +159,7 @@ public class EntityUtilTest {
         entity.setField3(3L);
         entity.field4 = true;
 
-        Map<String, Object> values = EntityUtil.values(entity, TestEntity.class, true);
+        Map<String, Object> values = EntityUtils.values(entity, TestEntity.class, true);
 
         assertThat(values).containsOnly(entry("field_1", "FIELD_1"), entry("field_2", 2), entry("field3", 3L),
                 entry("field4", true), entry("field_5", 0.0), entry("field_6", 6));
@@ -173,7 +173,7 @@ public class EntityUtilTest {
         entity.setField3(3L);
         entity.field4 = true;
 
-        Map<String, Object> values = EntityUtil.values(entity, TestEntity.class, false);
+        Map<String, Object> values = EntityUtils.values(entity, TestEntity.class, false);
         assertThat(values).containsOnly(entry("field_1", "FIELD_1"), entry("field3", 3L), entry("field4", true),
                 entry("field_5", 0.0), entry("field_6", 6));
     }

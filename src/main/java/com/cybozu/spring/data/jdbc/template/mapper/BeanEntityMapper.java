@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import com.cybozu.spring.data.jdbc.template.util.Accessor;
-import com.cybozu.spring.data.jdbc.template.util.EntityUtil;
+import com.cybozu.spring.data.jdbc.template.util.EntityUtils;
 
 public class BeanEntityMapper<T> extends AbstractEntityMapper<T> {
     private Map<String, Accessor> columnToAccessor;
@@ -24,7 +24,7 @@ public class BeanEntityMapper<T> extends AbstractEntityMapper<T> {
         Map<String, Accessor> properties = new HashMap<>();
 
         for (Accessor accessor : getAccessors()) {
-            properties.put(EntityUtil.columnName(accessor), accessor);
+            properties.put(EntityUtils.columnName(accessor), accessor);
         }
         columnToAccessor = Collections.unmodifiableMap(properties);
     }

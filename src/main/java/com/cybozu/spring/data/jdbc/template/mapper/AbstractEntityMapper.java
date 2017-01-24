@@ -11,7 +11,7 @@ import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 
 import com.cybozu.spring.data.jdbc.template.util.Accessor;
-import com.cybozu.spring.data.jdbc.template.util.EntityUtil;
+import com.cybozu.spring.data.jdbc.template.util.EntityUtils;
 
 public abstract class AbstractEntityMapper<T> implements EntityMapper<T> {
     @Getter(AccessLevel.PROTECTED)
@@ -24,7 +24,7 @@ public abstract class AbstractEntityMapper<T> implements EntityMapper<T> {
     public void initialize(Class<T> mappedClass) {
         EntityMapper.super.initialize(mappedClass);
         this.mappedClass = mappedClass;
-        this.accessors = Collections.unmodifiableList(EntityUtil.getAccessors(mappedClass));
+        this.accessors = Collections.unmodifiableList(EntityUtils.getAccessors(mappedClass));
     }
 
     @Override
@@ -36,7 +36,7 @@ public abstract class AbstractEntityMapper<T> implements EntityMapper<T> {
     public Map<String, Class<?>> types() {
         Map<String, Class<?>> result = new HashMap<>();
         for (Accessor accessor : accessors) {
-            String columnName = EntityUtil.columnName(accessor);
+            String columnName = EntityUtils.columnName(accessor);
             result.put(columnName, accessor.getValueType());
         }
         return result;
