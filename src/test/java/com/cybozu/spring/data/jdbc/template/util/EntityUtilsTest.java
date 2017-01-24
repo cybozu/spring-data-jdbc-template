@@ -92,6 +92,21 @@ public class EntityUtilsTest {
 
     }
 
+    static class Parent {
+        @Getter
+        @Setter
+        @Column(name = "field_parent")
+        @Id
+        private Long fieldParent;
+    }
+
+    static class Child extends Parent {
+        @Getter
+        @Setter
+        @Column(name = "field_child")
+        private String fieldChild;
+    }
+
     private Accessor propertyAccessor(String name) throws IntrospectionException {
         return Accessors.ofProperty(TestEntity.class, new PropertyDescriptor(name, TestEntity.class));
     }
@@ -134,6 +149,12 @@ public class EntityUtilsTest {
     }
 
     @Test
+    public void testGetAccessorsWithParentClass() throws Exception {
+        List<Accessor> accessors = EntityUtils.getAccessors(Child.class);
+        assertThat(accessors).extracting(a -> a.getName()).containsExactlyInAnyOrder("fieldParent", "fieldChild");
+    }
+
+    @Test
     public void testKeyNames() {
         List<String> keyNames = EntityUtils.keyNames(TestEntity.class);
         assertThat(keyNames).containsExactlyInAnyOrder("field_2", "field3");
@@ -146,9 +167,19 @@ public class EntityUtilsTest {
     }
 
     @Test
+    public void testColumnNamesWithParentClass() {
+        assertThat(EntityUtils.columnNames(Child.class)).containsExactlyInAnyOrder("field_parent", "field_child");
+    }
+
+    @Test
     public void testColumnNamesExceptKeys() {
         assertThat(EntityUtils.columnNamesExceptKeys(TestEntity.class)).containsExactlyInAnyOrder("field_1", "field4",
                 "field_5", "field_6");
+    }
+
+    @Test
+    public void testColumnNamesExceptKeysWithParentClass() {
+        assertThat(EntityUtils.columnNamesExceptKeys(Child.class)).containsExactlyInAnyOrder("field_child");
     }
 
     @Test
