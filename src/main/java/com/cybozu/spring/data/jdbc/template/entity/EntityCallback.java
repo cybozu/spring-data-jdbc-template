@@ -1,8 +1,8 @@
 package com.cybozu.spring.data.jdbc.template.entity;
 
 /**
- * This interface provides callbacks to entities. If a entity class implements this interface, the callback methods is
- * called when {@link com.cybozu.spring.data.jdbc.template.JdbcTemplateRepository}'s methods.
+ * This interface provides callbacks for entities. If an entity class implements this interface,
+ * {@link com.cybozu.spring.data.jdbc.template.JdbcTemplateRepository}'s methods call the callback methods.
  */
 public interface EntityCallback {
     /**
