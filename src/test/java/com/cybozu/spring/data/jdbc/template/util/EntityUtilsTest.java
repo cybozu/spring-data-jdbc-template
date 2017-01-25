@@ -4,6 +4,7 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -135,7 +136,7 @@ public class EntityUtilsTest {
 
     @Test
     public void testKeyNames() {
-        List<String> keyNames = EntityUtils.keyNames(TestEntity.class);
+        Set<String> keyNames = EntityUtils.keyNames(TestEntity.class);
         assertThat(keyNames).containsExactlyInAnyOrder("field_2", "field3");
     }
 

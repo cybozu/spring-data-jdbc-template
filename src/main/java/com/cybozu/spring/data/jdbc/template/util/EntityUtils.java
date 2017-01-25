@@ -98,8 +98,8 @@ public class EntityUtils {
         return result;
     }
 
-    public static List<String> keyNames(Class<?> klass) {
-        return new ArrayList<>(keyMap(klass).keySet());
+    public static Set<String> keyNames(Class<?> klass) {
+        return new HashSet<>(keyMap(klass).keySet());
     }
 
     public static Set<String> columnNames(Class<?> klass) {
