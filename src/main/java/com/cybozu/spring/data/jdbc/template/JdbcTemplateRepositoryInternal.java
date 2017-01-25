@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
+import com.cybozu.spring.data.jdbc.template.entity.EntityCallback;
 import com.cybozu.spring.data.jdbc.template.util.BeanFactoryUtils;
 import com.cybozu.spring.data.jdbc.template.util.EntityUtils;
 
@@ -40,11 +41,38 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
         return jdbcInsert;
     }
 
+    private void callBeforeInsert(T entity) {
+        if (entity instanceof EntityCallback) {
+            ((EntityCallback) entity).beforeInsert();
+        }
+    }
+
+    private void callAfterInsert(T entity) {
+        if (entity instanceof EntityCallback) {
+            ((EntityCallback) entity).afterInsert();
+        }
+    }
+
+    private void callBeforeUpdate(T entity) {
+        if (entity instanceof EntityCallback) {
+            ((EntityCallback) entity).beforeUpdate();
+        }
+    }
+
+    private void callAfterUpdate(T entity) {
+        if (entity instanceof EntityCallback) {
+            ((EntityCallback) entity).afterUpdate();
+        }
+    }
+
     @Override
     public void insert(T entity) {
         SimpleJdbcInsert jdbcInsert = createJdbcInsert();
         Map<String, Object> values = EntityUtils.values(entity, domainClass, false);
+
+        callBeforeInsert(entity);
         jdbcInsert.execute(values);
+        callAfterInsert(entity);
     }
 
     @Override
@@ -55,7 +83,12 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
         jdbcInsert.usingGeneratedKeyColumns(generatedKeyColumns.toArray(new String[generatedKeyColumns.size()]));
 
         Map<String, Object> values = EntityUtils.values(entity, domainClass, false);
-        return jdbcInsert.executeAndReturnKey(values);
+
+        callBeforeInsert(entity);
+        Number key = jdbcInsert.executeAndReturnKey(values);
+        callAfterInsert(entity);
+
+        return key;
     }
 
     static <U> String generateUpdateQuery(Class<U> domainClass) {
@@ -71,6 +104,9 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
     public void update(T entity) {
         String query = generateUpdateQuery(domainClass);
         Map<String, Object> values = EntityUtils.values(entity, domainClass, true);
+
+        callBeforeUpdate(entity);
         operations().update(query, values);
+        callAfterUpdate(entity);
     }
 }
