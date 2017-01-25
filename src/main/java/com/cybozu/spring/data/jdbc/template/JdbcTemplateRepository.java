@@ -11,6 +11,8 @@ import com.cybozu.spring.data.jdbc.template.JdbcTemplateRepository.IdPlaceholder
 public interface JdbcTemplateRepository<T> extends Repository<T, IdPlaceholder> {
     void insert(T entity);
 
+    Number insertAndReturnKey(T entity);
+
     void update(T entity);
 
     // We don't use CrudRepository. Thus ID type is not required.

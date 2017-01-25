@@ -106,6 +106,16 @@ public class EntityUtils {
         return new HashSet<>(columnMap(klass, true).keySet());
     }
 
+    public static Set<String> generateValueColumnNames(Class<?> klass) {
+        return columnMap(klass, true).entrySet().stream()
+                .filter(e -> e.getValue().getAnnotation(GeneratedValue.class) != null).map(e -> e.getKey())
+                .collect(Collectors.toSet());
+    }
+
+    public static Set<String> columnNamesExceptGeneratedValues(Class<?> klass) {
+        return new HashSet<>(columnMap(klass, false).keySet());
+    }
+
     public static List<String> columnNamesExceptKeys(Class<?> klass) {
         Set<String> columnNames = columnNames(klass);
         columnNames.removeAll(keyNames(klass));

@@ -1,6 +1,7 @@
 package com.cybozu.spring.data.jdbc.template;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.BeanFactory;
@@ -28,14 +29,33 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
                 NamedParameterJdbcOperations.class);
     }
 
+    private SimpleJdbcInsert createJdbcInsert() {
+        JdbcTemplate jdbcTemplate = (JdbcTemplate) operations().getJdbcOperations();
+        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+
+        jdbcInsert.withTableName(EntityUtils.tableName(domainClass));
+        Set<String> usingColumns = EntityUtils.columnNamesExceptGeneratedValues(domainClass);
+        jdbcInsert.usingColumns(usingColumns.toArray(new String[usingColumns.size()]));
+
+        return jdbcInsert;
+    }
+
     @Override
     public void insert(T entity) {
-        JdbcTemplate jdbcTemplate = (JdbcTemplate) operations().getJdbcOperations();
-
-        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName(EntityUtils.tableName(domainClass));
+        SimpleJdbcInsert jdbcInsert = createJdbcInsert();
         Map<String, Object> values = EntityUtils.values(entity, domainClass, false);
         jdbcInsert.execute(values);
+    }
+
+    @Override
+    public Number insertAndReturnKey(T entity) {
+        SimpleJdbcInsert jdbcInsert = createJdbcInsert();
+
+        Set<String> generatedKeyColumns = EntityUtils.generateValueColumnNames(domainClass);
+        jdbcInsert.usingGeneratedKeyColumns(generatedKeyColumns.toArray(new String[generatedKeyColumns.size()]));
+
+        Map<String, Object> values = EntityUtils.values(entity, domainClass, false);
+        return jdbcInsert.executeAndReturnKey(values);
     }
 
     static <U> String generateUpdateQuery(Class<U> domainClass) {

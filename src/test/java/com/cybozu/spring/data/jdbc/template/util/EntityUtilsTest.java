@@ -177,4 +177,14 @@ public class EntityUtilsTest {
         assertThat(values).containsOnly(entry("field_1", "FIELD_1"), entry("field3", 3L), entry("field4", true),
                 entry("field_5", 0.0), entry("field_6", new byte[] { 1, 2, 3 }));
     }
+
+    @Test
+    public void testGetGeneratedValueColumnNames() {
+        assertThat(EntityUtils.generateValueColumnNames(TestEntity.class)).containsExactlyInAnyOrder("field_2");
+    }
+
+    @Test
+    public void testGetColumnNamesExceptGeneratedKeys() {
+        assertThat(EntityUtils.generateValueColumnNames(TestEntity.class)).containsExactlyInAnyOrder("field_2");
+    }
 }
