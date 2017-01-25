@@ -4,6 +4,7 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -156,7 +157,7 @@ public class EntityUtilsTest {
 
     @Test
     public void testKeyNames() {
-        List<String> keyNames = EntityUtils.keyNames(TestEntity.class);
+        Set<String> keyNames = EntityUtils.keyNames(TestEntity.class);
         assertThat(keyNames).containsExactlyInAnyOrder("field_2", "field3");
     }
 
@@ -207,5 +208,16 @@ public class EntityUtilsTest {
         Map<String, Object> values = EntityUtils.values(entity, TestEntity.class, false);
         assertThat(values).containsOnly(entry("field_1", "FIELD_1"), entry("field3", 3L), entry("field4", true),
                 entry("field_5", 0.0), entry("field_6", new byte[] { 1, 2, 3 }));
+    }
+
+    @Test
+    public void testGeneratedValueColumnNames() {
+        assertThat(EntityUtils.generateValueColumnNames(TestEntity.class)).containsExactlyInAnyOrder("field_2");
+    }
+
+    @Test
+    public void testColumnNamesExceptGeneratedValues() {
+        assertThat(EntityUtils.columnNamesExceptGeneratedValues(TestEntity.class)).containsExactlyInAnyOrder("field_1",
+                "field3", "field4", "field_5", "field_6");
     }
 }

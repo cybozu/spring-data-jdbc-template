@@ -98,12 +98,22 @@ public class EntityUtils {
         return result;
     }
 
-    public static List<String> keyNames(Class<?> klass) {
-        return new ArrayList<>(keyMap(klass).keySet());
+    public static Set<String> keyNames(Class<?> klass) {
+        return new HashSet<>(keyMap(klass).keySet());
     }
 
     public static Set<String> columnNames(Class<?> klass) {
         return new HashSet<>(columnMap(klass, true).keySet());
+    }
+
+    public static Set<String> generateValueColumnNames(Class<?> klass) {
+        return columnMap(klass, true).entrySet().stream()
+                .filter(e -> e.getValue().getAnnotation(GeneratedValue.class) != null).map(e -> e.getKey())
+                .collect(Collectors.toSet());
+    }
+
+    public static Set<String> columnNamesExceptGeneratedValues(Class<?> klass) {
+        return new HashSet<>(columnMap(klass, false).keySet());
     }
 
     public static List<String> columnNamesExceptKeys(Class<?> klass) {
