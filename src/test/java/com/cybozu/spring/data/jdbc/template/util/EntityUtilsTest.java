@@ -180,12 +180,13 @@ public class EntityUtilsTest {
     }
 
     @Test
-    public void testGetGeneratedValueColumnNames() {
+    public void testGeneratedValueColumnNames() {
         assertThat(EntityUtils.generateValueColumnNames(TestEntity.class)).containsExactlyInAnyOrder("field_2");
     }
 
     @Test
-    public void testGetColumnNamesExceptGeneratedKeys() {
-        assertThat(EntityUtils.generateValueColumnNames(TestEntity.class)).containsExactlyInAnyOrder("field_2");
+    public void testColumnNamesExceptGeneratedValues() {
+        assertThat(EntityUtils.columnNamesExceptGeneratedValues(TestEntity.class)).containsExactlyInAnyOrder("field_1",
+                "field3", "field4", "field_5", "field_6");
     }
 }
