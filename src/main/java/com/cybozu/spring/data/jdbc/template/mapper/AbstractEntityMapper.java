@@ -28,7 +28,7 @@ public abstract class AbstractEntityMapper<T> implements EntityMapper<T> {
 
     @Override
     public T createInstance() {
-        return BeanUtils.instantiate(mappedClass);
+        return BeanUtils.instantiateClass(mappedClass);
     }
 
     @Override
