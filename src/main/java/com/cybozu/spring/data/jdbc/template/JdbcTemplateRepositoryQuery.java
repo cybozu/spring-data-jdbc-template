@@ -12,11 +12,13 @@ import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.query.QueryMethod;
 import org.springframework.data.repository.query.RepositoryQuery;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 
 import com.cybozu.spring.data.jdbc.template.annotation.Mapper;
 import com.cybozu.spring.data.jdbc.template.annotation.Modifying;
 import com.cybozu.spring.data.jdbc.template.annotation.Query;
+import com.cybozu.spring.data.jdbc.template.annotation.SingleColumn;
 import com.cybozu.spring.data.jdbc.template.mapper.EntityMapper;
 import com.cybozu.spring.data.jdbc.template.mapper.EntityRowMapper;
 import com.cybozu.spring.data.jdbc.template.util.BeanFactoryUtils;
@@ -68,8 +70,16 @@ class JdbcTemplateRepositoryQuery implements RepositoryQuery {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private <S> RowMapper<S> getRowMapper(JdbcTemplateQueryMethod queryMethod, Class<S> resultType) {
+        if (queryMethod.isSingleColumn()) {
+            return SingleColumnRowMapper.newInstance(resultType);
+        } else {
+            return getEntityRowMapper(queryMethod, resultType);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <S> RowMapper<S> getEntityRowMapper(JdbcTemplateQueryMethod queryMethod, Class<S> resultType) {
         Class<? extends EntityMapper<?>> mapperClass = null;
 
         if (queryMethod.mapperClass != null) {
@@ -90,6 +100,9 @@ class JdbcTemplateRepositoryQuery implements RepositoryQuery {
         @Getter
         private final String query;
 
+        @Getter
+        private final boolean singleColumn;
+
         private final Method method;
 
         private final Class<? extends EntityMapper<?>> mapperClass;
@@ -102,6 +115,8 @@ class JdbcTemplateRepositoryQuery implements RepositoryQuery {
             } else {
                 this.query = query.value();
             }
+
+            this.singleColumn = method.getAnnotation(SingleColumn.class) != null;
 
             Mapper mapperOnMethod = method.getAnnotation(Mapper.class);
             Mapper mapperOnInterface = metadata.getRepositoryInterface().getAnnotation(Mapper.class);

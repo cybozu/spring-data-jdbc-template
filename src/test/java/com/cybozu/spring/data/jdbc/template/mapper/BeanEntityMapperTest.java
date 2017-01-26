@@ -12,7 +12,7 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.*;
 
 public class BeanEntityMapperTest {
-    public static class TestEntity {
+    static class TestEntity {
         @Getter
         @Setter
         @Column(name = "field_1")
