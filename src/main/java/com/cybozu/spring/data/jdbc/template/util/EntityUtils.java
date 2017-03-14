@@ -134,10 +134,6 @@ public class EntityUtils {
 
     @SuppressWarnings("unchecked")
     public static Object stringToEnum(@Nonnull String value, Class<?> requiredType) {
-        try {
-            return Enum.valueOf((Class<? extends Enum>) requiredType, value);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
+        return Enum.valueOf((Class<? extends Enum>) requiredType, value);
     }
 }
