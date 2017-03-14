@@ -134,6 +134,6 @@ public class EntityUtils {
 
     @SuppressWarnings("unchecked")
     public static Object stringToEnum(@Nonnull String value, Class<?> requiredType) {
-        return Enum.valueOf((Class<? extends Enum>) requiredType, value);
+        return Enum.valueOf((Class<? extends Enum>) requiredType, value.trim());
     }
 }
