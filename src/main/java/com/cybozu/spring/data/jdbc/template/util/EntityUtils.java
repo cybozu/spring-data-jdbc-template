@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -129,5 +130,14 @@ public class EntityUtils {
             result.put(entry.getKey(), value);
         }
         return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Object stringToEnum(@Nonnull String value, Class<?> requiredType) {
+        try {
+            return Enum.valueOf((Class<? extends Enum>) requiredType, value);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 }
