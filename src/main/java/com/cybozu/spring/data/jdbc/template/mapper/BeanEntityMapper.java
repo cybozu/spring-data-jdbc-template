@@ -33,8 +33,15 @@ public class BeanEntityMapper<T> extends AbstractEntityMapper<T> {
     public void setValue(T object, @Nonnull String name, Object value) {
         Accessor accessor = columnToAccessor.get(name);
         if (accessor != null) {
-            columnToAccessor.get(name).setValue(object, value);
+            columnToAccessor.get(name).setValue(object, convertValue(value, accessor.getValueType()));
         }
+    }
+
+    protected Object convertValue(Object value, Class<?> requiredType) {
+        if (requiredType.isEnum() && value instanceof String) {
+            return EntityUtils.stringToEnum((String) value, requiredType);
+        }
+        return value;
     }
 
     public static class DefaultEntityMapper extends BeanEntityMapper<Object> {

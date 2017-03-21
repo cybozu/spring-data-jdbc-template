@@ -220,4 +220,18 @@ public class EntityUtilsTest {
         assertThat(EntityUtils.columnNamesExceptGeneratedValues(TestEntity.class)).containsExactlyInAnyOrder("field_1",
                 "field3", "field4", "field_5", "field_6");
     }
+
+    private enum TestEnum {
+        A
+    }
+
+    @Test
+    public void testStringToEnum() {
+        assertThat(EntityUtils.stringToEnum("A", TestEnum.class)).isEqualTo(TestEnum.A);
+        assertThat(EntityUtils.stringToEnum(" A ", TestEnum.class)).isEqualTo(TestEnum.A);
+        assertThatThrownBy(() -> EntityUtils.stringToEnum("a", TestEnum.class)).isInstanceOf(
+                IllegalArgumentException.class);
+        assertThatThrownBy(() -> EntityUtils.stringToEnum("X", TestEnum.class)).isInstanceOf(
+                IllegalArgumentException.class);
+    }
 }
