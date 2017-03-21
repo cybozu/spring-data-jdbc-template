@@ -19,6 +19,14 @@ public class BeanEntityMapperTest {
         private String field1;
 
         public Long field2;
+
+        @Getter
+        @Setter
+        private TestEnum field3;
+    }
+
+    enum TestEnum {
+        A
     }
 
     @Test
@@ -35,7 +43,8 @@ public class BeanEntityMapperTest {
 
         Map<String, Class<?>> actual = mapper.types();
 
-        assertThat(actual).containsExactly(entry("field_1", String.class), entry("field2", Long.class));
+        assertThat(actual).containsOnly(entry("field_1", String.class), entry("field2", Long.class),
+                entry("field3", TestEnum.class));
     }
 
     @Test
@@ -47,9 +56,11 @@ public class BeanEntityMapperTest {
         mapper.startMapping(entity);
         mapper.setValue(entity, "field_1", "value1");
         mapper.setValue(entity, "field2", 42L);
+        mapper.setValue(entity, "field3", "A");
         mapper.finishMapping(entity);
 
         assertThat(entity.getField1()).isEqualTo("value1");
         assertThat(entity.field2).isEqualTo(42L);
+        assertThat(entity.getField3()).isEqualTo(TestEnum.A);
     }
 }

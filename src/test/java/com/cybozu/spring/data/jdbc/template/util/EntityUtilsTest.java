@@ -228,6 +228,7 @@ public class EntityUtilsTest {
     @Test
     public void testStringToEnum() {
         assertThat(EntityUtils.stringToEnum("A", TestEnum.class)).isEqualTo(TestEnum.A);
+        assertThat(EntityUtils.stringToEnum(" A ", TestEnum.class)).isEqualTo(TestEnum.A);
         assertThatThrownBy(() -> EntityUtils.stringToEnum("X", TestEnum.class)).isInstanceOf(
                 IllegalArgumentException.class);
     }
