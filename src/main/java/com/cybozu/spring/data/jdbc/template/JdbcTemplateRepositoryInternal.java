@@ -2,7 +2,6 @@ package com.cybozu.spring.data.jdbc.template;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,6 +11,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import com.cybozu.spring.data.jdbc.template.entity.EntityCallback;
 import com.cybozu.spring.data.jdbc.template.util.BeanFactoryUtils;
 import com.cybozu.spring.data.jdbc.template.util.EntityUtils;
+import com.cybozu.spring.data.jdbc.template.util.SimpleJdbcUpdate;
 
 class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
     private final Class<T> domainClass;
@@ -79,7 +79,7 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
     public Number insertAndReturnKey(T entity) {
         SimpleJdbcInsert jdbcInsert = createJdbcInsert();
 
-        Set<String> generatedKeyColumns = EntityUtils.generateValueColumnNames(domainClass);
+        Set<String> generatedKeyColumns = EntityUtils.generatedValueColumnNames(domainClass);
         jdbcInsert.usingGeneratedKeyColumns(generatedKeyColumns.toArray(new String[generatedKeyColumns.size()]));
 
         Map<String, Object> values = EntityUtils.values(entity, domainClass, false);
@@ -91,22 +91,13 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
         return key;
     }
 
-    static <U> String generateUpdateQuery(Class<U> domainClass) {
-        String tableName = EntityUtils.tableName(domainClass);
-        String setClause = EntityUtils.columnNamesExceptKeys(domainClass).stream().map(c -> c + " = :" + c)
-                .collect(Collectors.joining(" , "));
-        String keyClause = EntityUtils.keyNames(domainClass).stream().map(k -> k + " = :" + k)
-                .collect(Collectors.joining(" AND "));
-        return "UPDATE " + tableName + " SET " + setClause + " WHERE " + keyClause;
-    }
-
     @Override
     public void update(T entity) {
-        String query = generateUpdateQuery(domainClass);
         Map<String, Object> values = EntityUtils.values(entity, domainClass, true);
+        SimpleJdbcUpdate jdbcUpdate = SimpleJdbcUpdate.create(operations(), domainClass);
 
         callBeforeUpdate(entity);
-        operations().update(query, values);
+        jdbcUpdate.update(values);
         callAfterUpdate(entity);
     }
 }
