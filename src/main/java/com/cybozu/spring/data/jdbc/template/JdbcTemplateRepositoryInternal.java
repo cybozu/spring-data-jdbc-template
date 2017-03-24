@@ -67,16 +67,19 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
 
     @Override
     public void insert(T entity) {
+        callBeforeInsert(entity);
+
         SimpleJdbcInsert jdbcInsert = createJdbcInsert();
         Map<String, Object> values = EntityUtils.values(entity, domainClass, false);
 
-        callBeforeInsert(entity);
         jdbcInsert.execute(values);
         callAfterInsert(entity);
     }
 
     @Override
     public Number insertAndReturnKey(T entity) {
+        callBeforeInsert(entity);
+
         SimpleJdbcInsert jdbcInsert = createJdbcInsert();
 
         Set<String> generatedKeyColumns = EntityUtils.generatedValueColumnNames(domainClass);
@@ -84,7 +87,6 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
 
         Map<String, Object> values = EntityUtils.values(entity, domainClass, false);
 
-        callBeforeInsert(entity);
         Number key = jdbcInsert.executeAndReturnKey(values);
         callAfterInsert(entity);
 
@@ -93,10 +95,11 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
 
     @Override
     public void update(T entity) {
+        callBeforeUpdate(entity);
+
         Map<String, Object> values = EntityUtils.values(entity, domainClass, true);
         SimpleJdbcUpdate jdbcUpdate = SimpleJdbcUpdate.create(operations(), domainClass);
 
-        callBeforeUpdate(entity);
         jdbcUpdate.update(values);
         callAfterUpdate(entity);
     }
