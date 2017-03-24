@@ -62,8 +62,8 @@ public class SimpleJdbcUpdate {
     }
 
     private void initMetaData() {
-        this.tableMetaDataContext.setTableName(tableName);
-        this.tableMetaDataContext.processMetaData(jdbcTemplate.getDataSource(), columnNames, getGeneratedKeyNames());
+        tableMetaDataContext.setTableName(tableName);
+        tableMetaDataContext.processMetaData(jdbcTemplate.getDataSource(), columnNames, getGeneratedKeyNames());
     }
 
     private Map<String, Integer> sqlTypes() {
@@ -90,6 +90,6 @@ public class SimpleJdbcUpdate {
     }
 
     public void update(Map<String, Object> values) {
-        namedParameterJdbcOperations.update(this.query, parameterSource(values));
+        namedParameterJdbcOperations.update(query, parameterSource(values));
     }
 }
