@@ -107,7 +107,7 @@ public class EntityUtils {
         return new HashSet<>(columnMap(klass, true).keySet());
     }
 
-    public static Set<String> generateValueColumnNames(Class<?> klass) {
+    public static Set<String> generatedValueColumnNames(Class<?> klass) {
         return columnMap(klass, true).entrySet().stream()
                 .filter(e -> e.getValue().getAnnotation(GeneratedValue.class) != null).map(e -> e.getKey())
                 .collect(Collectors.toSet());

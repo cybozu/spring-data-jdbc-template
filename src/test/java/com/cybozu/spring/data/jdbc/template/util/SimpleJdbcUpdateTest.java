@@ -1,4 +1,4 @@
-package com.cybozu.spring.data.jdbc.template;
+package com.cybozu.spring.data.jdbc.template.util;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class JdbcTemplateRepositoryInternalTest {
+public class SimpleJdbcUpdateTest {
     @Table(name = "test_table")
     private static class TestEntity {
         @Getter
@@ -34,10 +34,11 @@ public class JdbcTemplateRepositoryInternalTest {
         public boolean field4;
     }
 
-
     @Test
     public void testGenerateUpdateQuery() {
-        String query = JdbcTemplateRepositoryInternal.generateUpdateQuery(TestEntity.class);
-        assertThat(query).isEqualTo("UPDATE test_table SET field_1 = :field_1 , field4 = :field4 WHERE field_2 = :field_2 AND field3 = :field3");
+        String query = SimpleJdbcUpdate.generateUpdateQuery(TestEntity.class, "test_table");
+        assertThat(query)
+                .isEqualTo(
+                        "UPDATE test_table SET field_1 = :field_1 , field4 = :field4 WHERE field_2 = :field_2 AND field3 = :field3");
     }
 }

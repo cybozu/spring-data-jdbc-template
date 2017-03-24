@@ -212,7 +212,7 @@ public class EntityUtilsTest {
 
     @Test
     public void testGeneratedValueColumnNames() {
-        assertThat(EntityUtils.generateValueColumnNames(TestEntity.class)).containsExactlyInAnyOrder("field_2");
+        assertThat(EntityUtils.generatedValueColumnNames(TestEntity.class)).containsExactlyInAnyOrder("field_2");
     }
 
     @Test
