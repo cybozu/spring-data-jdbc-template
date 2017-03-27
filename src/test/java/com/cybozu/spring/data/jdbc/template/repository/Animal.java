@@ -1,6 +1,7 @@
 package com.cybozu.spring.data.jdbc.template.repository;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,21 +12,22 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table(name = "test")
-public class TestEntity {
+@Table(name = Animal.TABLE_NAME)
+public class Animal {
+    public static final String TABLE_NAME = "animal";
+
     @Id
-    @Column(name = "id")
+    @GeneratedValue
     private Long id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "value")
-    private String value;
+    @Column(name = "scientific_name")
+    private String scientificName;
 
     private Status status;
 
     public enum Status {
-        GOOD, BAD
+        LC, NT, VU, EN, CR, EW, EX
     }
 }

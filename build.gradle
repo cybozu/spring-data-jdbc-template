@@ -28,6 +28,7 @@ dependencies {
     testCompile group: 'org.springframework', name: 'spring-test', version: springVersion
     testCompile group: 'com.ninja-squad', name: 'DbSetup', version: '2.1.0'
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.194'
+    testCompile group: 'org.assertj', name: 'assertj-db', version: '1.1.1'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
