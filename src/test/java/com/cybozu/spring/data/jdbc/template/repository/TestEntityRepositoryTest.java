@@ -3,6 +3,7 @@ package com.cybozu.spring.data.jdbc.template.repository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import javax.sql.DataSource;
 
@@ -57,5 +58,16 @@ public class TestEntityRepositoryTest {
         assertThat(actual.getName()).isEqualTo("a");
         assertThat(actual.getValue()).isEqualTo("this is value!");
         assertThat(actual.getStatus()).isEqualTo(Status.GOOD);
+    }
+
+    @Test
+    public void testGetByName() {
+        initDb(Operations.insertInto("test").columns("name", "value", "status").values("a", "this is value!", "GOOD")
+                .values("b", null, "BAD").build());
+        List<TestEntity> actual = sut.getByNames(Arrays.asList("a", "b"));
+        assertThat(actual).extracting(e -> e.getId()).allMatch(Objects::nonNull);
+        assertThat(actual).extracting(e -> e.getName()).containsExactlyInAnyOrder("a", "b");
+        assertThat(actual).extracting(e -> e.getValue()).containsExactlyInAnyOrder("this is value!", null);
+        assertThat(actual).extracting(e -> e.getStatus()).containsExactlyInAnyOrder(Status.GOOD, Status.BAD);
     }
 }

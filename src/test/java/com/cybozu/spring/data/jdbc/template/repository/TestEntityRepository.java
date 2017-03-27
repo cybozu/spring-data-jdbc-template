@@ -13,6 +13,6 @@ public interface TestEntityRepository extends JdbcTemplateRepository<TestEntity>
     @Query("SELECT * FROM test WHERE name = :name")
     TestEntity getOneByName(@Param("name") String name);
 
-    @Query("SELECT * FROM test WHERE name = :name")
-    List<TestEntity> getByName(@Param("name") String name);
+    @Query("SELECT * FROM test WHERE name IN (:names)")
+    List<TestEntity> getByNames(@Param("names") List<String> names);
 }
