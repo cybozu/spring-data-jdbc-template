@@ -127,4 +127,23 @@ public class AnimalRepositoryTest {
         Assertions.assertThat(table()).hasNumberOfRows(1).row(0)
                 .hasValues(1L, "humboldt penguin", "Spheniscus humboldti", "VU");
     }
+
+    @Test
+    public void testUpdateUsingQuery() {
+        initDb(insertBuilder().values("western lowland gorilla", "Gorilla gorilla", "CR").build());
+
+        int num = sut.updateScientificNameByName("Gorilla gorilla gorilla", "western lowland gorilla");
+
+        assertThat(num).isEqualTo(1);
+
+        Assertions.assertThat(table()).row(0).hasValues(1L, "western lowland gorilla", "Gorilla gorilla gorilla", "CR");
+    }
+
+    @Test
+    public void testCountAll() {
+        initDb(insertBuilder().values("serval", "Leptailurus serval", "LC")
+                .values("crested ibis", "Nipponia nippon", "EN").build());
+
+        assertThat(sut.countAll()).isEqualTo(2);
+    }
 }
