@@ -1,6 +1,5 @@
 package com.cybozu.spring.data.jdbc.template.repository;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -45,13 +44,7 @@ public class AnimalRepositoryTest {
     }
 
     private void initDb(Operation... operations) {
-        List<Operation> ops = new ArrayList<>();
-        ops.add(DROP_TABLE);
-        ops.add(CREATE_TABLE);
-        ops.addAll(Arrays.asList(operations));
-        DbSetup dbSetup = new DbSetup(new DataSourceDestination(dataSource), Operations.sequenceOf(ops));
-
-        dbSetup.launch();
+        DbTestUtils.initDb(dataSource, CREATE_TABLE, DROP_TABLE, operations);
     }
 
     private Insert.Builder insertBuilder() {
