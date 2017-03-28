@@ -25,4 +25,7 @@ public interface AnimalRepository extends JdbcTemplateRepository<Animal> {
     @Modifying
     @Query("UPDATE " + Animal.TABLE_NAME + " SET scientific_name = :scientificName WHERE name = :name")
     int updateScientificNameByName(@Param("scientificName") String scientificName, @Param("name") String name);
+
+    Animal getOneByNameWithoutQuery(@Param("name") String name);
+
 }
