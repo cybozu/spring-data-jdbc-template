@@ -146,4 +146,9 @@ public class AnimalRepositoryTest {
 
         assertThat(sut.countAll()).isEqualTo(2);
     }
+
+    @Test
+    public void methodWithoutQueryThrowsRuntimeException() {
+        assertThatThrownBy(() -> sut.getOneByNameWithoutQuery("serval")).isInstanceOf(RuntimeException.class);
+    }
 }
