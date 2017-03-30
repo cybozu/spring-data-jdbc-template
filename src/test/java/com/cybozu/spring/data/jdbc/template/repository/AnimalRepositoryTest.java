@@ -144,4 +144,16 @@ public class AnimalRepositoryTest {
     public void methodWithoutQueryThrowsRuntimeException() {
         assertThatThrownBy(() -> sut.getOneByNameWithoutQuery("serval")).isInstanceOf(RuntimeException.class);
     }
+
+    @Test
+    public void testQueryMethodWithEnumParameter() {
+        initDb(insertBuilder().values("serval", "Leptailurus serval", "LC")
+                .values("crested ibis", "Nipponia nippon", "EN").build());
+
+        List<Animal> animals = sut.getByStatus(Status.LC);
+
+        assertThat(animals).hasSize(1);
+        assertThat(animals.get(0).getName()).isEqualTo("serval");
+        assertThat(animals.get(0).getStatus()).isEqualTo(Status.LC);
+    }
 }
