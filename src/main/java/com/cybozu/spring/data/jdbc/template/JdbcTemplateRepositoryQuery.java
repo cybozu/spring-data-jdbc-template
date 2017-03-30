@@ -53,6 +53,8 @@ class JdbcTemplateRepositoryQuery implements RepositoryQuery {
 
     private Object convertValue(Object value, Class<?> type) {
         if (type.isEnum() && value != null) {
+            // SimpleJdbcInsert calls toString() for enum.
+            // This class also calls it for consistency.
             return value.toString();
         }
         return value;
