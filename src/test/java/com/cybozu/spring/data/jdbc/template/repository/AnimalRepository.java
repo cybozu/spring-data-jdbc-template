@@ -9,6 +9,7 @@ import com.cybozu.spring.data.jdbc.template.JdbcTemplateRepository;
 import com.cybozu.spring.data.jdbc.template.annotation.Modifying;
 import com.cybozu.spring.data.jdbc.template.annotation.Query;
 import com.cybozu.spring.data.jdbc.template.annotation.SingleColumn;
+import com.cybozu.spring.data.jdbc.template.repository.Animal.Status;
 
 @Repository
 public interface AnimalRepository extends JdbcTemplateRepository<Animal> {
@@ -28,4 +29,7 @@ public interface AnimalRepository extends JdbcTemplateRepository<Animal> {
 
     Animal getOneByNameWithoutQuery(@Param("name") String name);
 
+
+    @Query("SELECT * FROM " + Animal.TABLE_NAME + " WHERE status = :status")
+    List<Animal> getByStatus(@Param("status") Status status);
 }

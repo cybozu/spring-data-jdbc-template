@@ -9,6 +9,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.repository.core.RepositoryMetadata;
+import org.springframework.data.repository.query.Parameter;
 import org.springframework.data.repository.query.QueryMethod;
 import org.springframework.data.repository.query.RepositoryQuery;
 import org.springframework.jdbc.core.RowMapper;
@@ -50,6 +51,13 @@ class JdbcTemplateRepositoryQuery implements RepositoryQuery {
         return query;
     }
 
+    private Object convertValue(Object value, Class<?> type) {
+        if (type.isEnum() && value != null) {
+            return value.toString();
+        }
+        return value;
+    }
+
     @Override
     public Object execute(Object[] parameters) {
         NamedParameterJdbcOperations jdbcTemplate = BeanFactoryUtils.getBeanByNameOrType(beanFactory,
@@ -57,8 +65,8 @@ class JdbcTemplateRepositoryQuery implements RepositoryQuery {
 
         Map<String, Object> paramMap = new HashMap<>();
         for (int i = 0; i < parameters.length; i++) {
-            String paramName = queryMethod.getParameters().getParameter(i).getName();
-            paramMap.put(paramName, parameters[i]);
+            Parameter param = queryMethod.getParameters().getParameter(i);
+            paramMap.put(param.getName(), convertValue(parameters[i], param.getType()));
         }
 
         Class<?> resultType = queryMethod.getReturnedObjectType();
