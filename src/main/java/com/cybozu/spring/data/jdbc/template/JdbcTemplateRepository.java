@@ -1,6 +1,9 @@
 package com.cybozu.spring.data.jdbc.template;
 
 import java.io.Serializable;
+import java.util.function.BiPredicate;
+
+import javax.annotation.Nullable;
 
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
@@ -47,7 +50,21 @@ public interface JdbcTemplateRepository<T> extends Repository<T, IdPlaceholder> 
      * @param entity
      *            an updated entity
      */
-    void update(T entity);
+    default void update(T entity) {
+        update(entity, (column, value) -> true);
+    }
+
+    /**
+     * Update an entity.
+     *
+     * @param entity
+     *            an updated entity
+     * @param includeColumnPredicate
+     *            a predicate to determine whether a column should be used for updating. The first argument is the
+     *            column name and the second argument is the value.s
+     *
+     */
+    void update(T entity, @Nullable BiPredicate<String, Object> includeColumnPredicate);
 
     // We don't use CrudRepository. Thus ID type is not required.
     interface IdPlaceholder extends Serializable {

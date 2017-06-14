@@ -1,7 +1,11 @@
 package com.cybozu.spring.data.jdbc.template;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiPredicate;
+
+import javax.annotation.Nonnull;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -93,11 +97,26 @@ class JdbcTemplateRepositoryInternal<T> implements JdbcTemplateRepository<T> {
         return key;
     }
 
+    private Map<String, Object> filterMap(Map<String, Object> values,
+            @Nonnull BiPredicate<String, Object> includeColumnPredicate) {
+        Map<String, Object> result = new HashMap<>();
+        for (Map.Entry<String, Object> entry : values.entrySet()) {
+            if (includeColumnPredicate.test(entry.getKey(), entry.getValue())) {
+                result.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return result;
+    }
+
     @Override
-    public void update(T entity) {
+    public void update(T entity, BiPredicate<String, Object> includeColumnPredicate) {
         callBeforeUpdate(entity);
 
         Map<String, Object> values = EntityUtils.values(entity, domainClass, true);
+        if (includeColumnPredicate != null) {
+            values = filterMap(values, includeColumnPredicate);
+        }
+
         SimpleJdbcUpdate jdbcUpdate = SimpleJdbcUpdate.create(operations(), domainClass);
 
         jdbcUpdate.update(values);
