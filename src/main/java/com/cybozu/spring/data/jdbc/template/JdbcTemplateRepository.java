@@ -61,7 +61,7 @@ public interface JdbcTemplateRepository<T> extends Repository<T, IdPlaceholder> 
      *            an updated entity
      * @param includeColumnPredicate
      *            a predicate to determine whether a column should be used for updating. The first argument is the
-     *            column name and the second argument is the value.s
+     *            column name and the second argument is the value.
      *
      */
     void update(T entity, @Nullable BiPredicate<String, Object> includeColumnPredicate);
