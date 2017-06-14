@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,21 +24,20 @@ public class SimpleJdbcUpdate {
     private final NamedParameterJdbcOperations namedParameterJdbcOperations;
     private final JdbcTemplate jdbcTemplate;
 
+    private final Class<?> entityClass;
     private final String tableName;
     private final List<String> columnNames;
     private final List<String> generatedKeyNames;
 
-    private final String query;
-
-    private SimpleJdbcUpdate(NamedParameterJdbcOperations namedParameterJdbcOperations, String query, String tableName,
-            Collection<String> columnNames, Collection<String> generatedKeyNames) {
+    private SimpleJdbcUpdate(NamedParameterJdbcOperations namedParameterJdbcOperations, Class<?> entityClass,
+            String tableName, Collection<String> columnNames, Collection<String> generatedKeyNames) {
         this.namedParameterJdbcOperations = namedParameterJdbcOperations;
         this.jdbcTemplate = (JdbcTemplate) namedParameterJdbcOperations.getJdbcOperations();
         this.tableMetaDataContext.setNativeJdbcExtractor(jdbcTemplate.getNativeJdbcExtractor());
+        this.entityClass = entityClass;
         this.tableName = tableName;
         this.columnNames = Collections.unmodifiableList(new ArrayList<>(columnNames));
         this.generatedKeyNames = Collections.unmodifiableList(new ArrayList<>(generatedKeyNames));
-        this.query = query;
 
         initMetaData();
     }
@@ -45,13 +45,13 @@ public class SimpleJdbcUpdate {
     public static SimpleJdbcUpdate create(NamedParameterJdbcOperations namedParameterJdbcOperations,
             Class<?> entityClass) {
         String tableName = EntityUtils.tableName(entityClass);
-        return new SimpleJdbcUpdate(namedParameterJdbcOperations, generateUpdateQuery(entityClass, tableName),
-                tableName, EntityUtils.columnNames(entityClass), EntityUtils.generatedValueColumnNames(entityClass));
+        return new SimpleJdbcUpdate(namedParameterJdbcOperations, entityClass, tableName,
+                EntityUtils.columnNames(entityClass), EntityUtils.generatedValueColumnNames(entityClass));
     }
 
-    static <U> String generateUpdateQuery(Class<U> domainClass, String tableName) {
-        String setClause = EntityUtils.columnNamesExceptKeys(domainClass).stream().map(c -> c + " = :" + c)
-                .collect(Collectors.joining(" , "));
+    static <U> String generateUpdateQuery(Class<U> domainClass, String tableName, Predicate<String> includeColumn) {
+        String setClause = EntityUtils.columnNamesExceptKeys(domainClass).stream().filter(includeColumn)
+                .map(c -> c + " = :" + c).collect(Collectors.joining(" , "));
         String keyClause = EntityUtils.keyNames(domainClass).stream().map(k -> k + " = :" + k)
                 .collect(Collectors.joining(" AND "));
         return "UPDATE " + tableName + " SET " + setClause + " WHERE " + keyClause;
@@ -90,6 +90,7 @@ public class SimpleJdbcUpdate {
     }
 
     public void update(Map<String, Object> values) {
+        String query = generateUpdateQuery(entityClass, tableName, values::containsKey);
         namedParameterJdbcOperations.update(query, parameterSource(values));
     }
 }

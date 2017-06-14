@@ -1,5 +1,7 @@
 package com.cybozu.spring.data.jdbc.template.util;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -36,9 +38,17 @@ public class SimpleJdbcUpdateTest {
 
     @Test
     public void testGenerateUpdateQuery() {
-        String query = SimpleJdbcUpdate.generateUpdateQuery(TestEntity.class, "test_table");
+        String query = SimpleJdbcUpdate.generateUpdateQuery(TestEntity.class, "test_table", (c) -> true);
         assertThat(query)
                 .isEqualTo(
                         "UPDATE test_table SET field_1 = :field_1 , field4 = :field4 WHERE field_2 = :field_2 AND field3 = :field3");
+    }
+
+    @Test
+    public void testGenerateUpdateQueryOneField() {
+        String query = SimpleJdbcUpdate.generateUpdateQuery(TestEntity.class, "test_table",
+                (c) -> Objects.equals(c, "field4"));
+        assertThat(query).isEqualTo(
+                "UPDATE test_table SET field4 = :field4 WHERE field_2 = :field_2 AND field3 = :field3");
     }
 }

@@ -122,6 +122,20 @@ public class AnimalRepositoryTest {
     }
 
     @Test
+    public void testUpdateWithPredicate() {
+        initDb(insertBuilder().values("humboldt penguin", "Spheniscus humboldti", "LC").build());
+
+        Animal humboldt = sut.getOneByName("humboldt penguin");
+        humboldt.setScientificName(null);
+        humboldt.setStatus(Status.VU);
+
+        sut.update(humboldt, (key, val) -> val != null);
+
+        Assertions.assertThat(table()).hasNumberOfRows(1).row(0)
+                .hasValues(1L, "humboldt penguin", "Spheniscus humboldti", "VU");
+    }
+
+    @Test
     public void testUpdateUsingQuery() {
         initDb(insertBuilder().values("western lowland gorilla", "Gorilla gorilla", "CR").build());
 
