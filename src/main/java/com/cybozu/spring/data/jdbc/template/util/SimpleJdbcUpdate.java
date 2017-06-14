@@ -49,8 +49,7 @@ public class SimpleJdbcUpdate {
                 EntityUtils.columnNames(entityClass), EntityUtils.generatedValueColumnNames(entityClass));
     }
 
-    static <U> String generateUpdateQuery(Class<U> domainClass, String tableName,
-            Predicate<String> includeColumn) {
+    static <U> String generateUpdateQuery(Class<U> domainClass, String tableName, Predicate<String> includeColumn) {
         String setClause = EntityUtils.columnNamesExceptKeys(domainClass).stream().filter(includeColumn)
                 .map(c -> c + " = :" + c).collect(Collectors.joining(" , "));
         String keyClause = EntityUtils.keyNames(domainClass).stream().map(k -> k + " = :" + k)
@@ -91,7 +90,7 @@ public class SimpleJdbcUpdate {
     }
 
     public void update(Map<String, Object> values) {
-        String query = generateUpdateQuery(entityClass, tableName, (columnName) -> values.containsKey(columnName));
+        String query = generateUpdateQuery(entityClass, tableName, values::containsKey);
         namedParameterJdbcOperations.update(query, parameterSource(values));
     }
 }
