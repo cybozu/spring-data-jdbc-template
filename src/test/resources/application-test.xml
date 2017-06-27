@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:repo="http://www.cybozu.com/schema/spring/data-jdbc-repository"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.cybozu.com/schema/spring/data-jdbc-repository
+        http://www.cybozu.com/schema/spring/data-jdbc-repository/spring-data-jdbc-repository.xsd">
+    <context:component-scan base-package="com.cybozu.spring.data">
+        <context:exclude-filter type="assignable"
+                                expression="com.cybozu.spring.data.jdbc.template.repository.TestConfig"/>
+    </context:component-scan>
+
+    <bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <constructor-arg name="url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=MYSQL;DATABASE_TO_UPPER=FALSE"/>
+    </bean>
+
+    <repo:repositories base-package="com.cybozu.spring.data.jdbc.template.repository"
+                       named-parameter-jdbc-operations-bean-name="operation1"/>
+    <bean name="operation1" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean name="operation2" class="com.cybozu.spring.data.jdbc.template.repository.NamedParameterJdbcOperationsMock"
+          factory-method="create"/>
+</beans>

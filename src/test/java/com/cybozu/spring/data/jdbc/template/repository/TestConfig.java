@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.cybozu.spring.data.jdbc.template.EnableJdbcTemplateRepositories;
 
 @Configuration
-@EnableJdbcTemplateRepositories(basePackages = "com.cybozu.spring.data.jdbc.template.repository")
+@EnableJdbcTemplateRepositories(basePackages = "com.cybozu.spring.data.jdbc.template.repository", namedParameterJdbcOperationsBeanName = "namedParameterJdbcOperations")
 @EnableTransactionManagement
 public class TestConfig implements BeanFactoryAware {
     private BeanFactory beanFactory;
