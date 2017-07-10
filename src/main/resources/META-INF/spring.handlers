@@ -1,0 +1,1 @@
+http\://www.cybozu.com/schema/spring/data-jdbc-repository=com.cybozu.spring.data.jdbc.template.config.JdbcTemplateNameSpaceHandler

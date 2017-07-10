@@ -1,0 +1,2 @@
+http\://www.cybozu.com/schema/spring/data-jdbc-repository/spring-data-jdbc-repository-1.0.xsd=com/cybozu/spring/data/jdbc/template/config/spring-data-jdbc-repository-1.0.xsd
+http\://www.cybozu.com/schema/spring/data-jdbc-repository/spring-data-jdbc-repository.xsd=com/cybozu/spring/data/jdbc/template/config/spring-data-jdbc-repository-1.0.xsd
