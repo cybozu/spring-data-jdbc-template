@@ -65,7 +65,8 @@ EntityCallback インターフェースを実装することで、insert/update�
 JPAでの、`@PrePersist`, `@PostPersist`, `@PreUpdate`, `@PostUpdate` アノテーションの代替。
 
 ### Single-column query
-countなどカラムが1つのクエリを書く時は、@SingleColumnアノテーションを付ける
+countなどカラムが1つのクエリを書く時は、@SingleColumnアノテーションを付ける。
+
 例:
 ```java
 @SingleColumn
@@ -76,7 +77,7 @@ long count();
 ## Mapperのカスタマイズ
 デフォルトではResutSetからEntityへのマッピングをリフレクションで行っている。
 
-以下の場合はカスタマイズが必要
+以下の場合はカスタマイズが必要。
 
 * 高速化のため
 * リレーションを扱いたい時
@@ -92,7 +93,7 @@ public SomeEntity getWithMapper();
 
 Mapperクラスは`EntityMapper` インターフェースを実装しなければならない。
 通常は、`AbstractEntityMapper`を継承して、`setValue`メソッドだけオーバーライドすれば良い。
-setValue`メソッドには、Entityのインスタンス、カラム名、値が渡ってくるので、値をセットする。
+`setValue`メソッドには、Entityのインスタンス、カラム名、値が渡ってくるので、値をセットする。
 
 ## 設定方法
 ### Repositoryを有効化する
