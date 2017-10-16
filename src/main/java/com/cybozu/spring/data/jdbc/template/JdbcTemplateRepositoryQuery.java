@@ -1,6 +1,7 @@
 package com.cybozu.spring.data.jdbc.template;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,10 +74,29 @@ class JdbcTemplateRepositoryQuery implements RepositoryQuery {
 
         Class<?> resultType = queryMethod.getReturnedObjectType();
 
+        Object result;
         if (queryMethod.isModifyingQuery()) {
-            return jdbcTemplate.update(getQuery(), paramMap);
+            result = jdbcTemplate.update(getQuery(), paramMap);
         } else {
-            return jdbcTemplate.query(getQuery(), paramMap, getRowMapper(this.queryMethod, resultType));
+            result = jdbcTemplate.query(getQuery(), paramMap, getRowMapper(this.queryMethod, resultType));
+        }
+        return getFirstIfList(result, queryMethod);
+    }
+
+    private Object getFirstIfList(Object source, QueryMethod queryMethod) {
+        if (source == null) {
+            return null;
+        }
+
+        if (!(source instanceof Collection)) {
+            return source;
+        }
+
+        if (queryMethod.isCollectionQuery()) {
+            return source;
+        } else {
+            Collection<?> collection = (Collection<?>) source;
+            return collection.stream().findFirst().orElse(null);
         }
     }
 
