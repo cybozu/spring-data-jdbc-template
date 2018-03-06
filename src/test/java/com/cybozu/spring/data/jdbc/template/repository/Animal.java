@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +27,11 @@ public class Animal {
     private String scientificName;
 
     private Status status;
+
+    @Transient
+    private String fieldWithTransientAnnotation;
+
+    private transient String fieldWithTransientModifier;
 
     public enum Status {
         LC, NT, VU, EN, CR, EW, EX

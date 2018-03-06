@@ -17,6 +17,9 @@ public class User {
  
     @Column(name = "value")
     private String nickname;
+    
+    @Transient
+    private String password;
 }
 ```
 
@@ -26,6 +29,8 @@ auto incrementなら `@GeneratedValue` を指定。
 
 カラム名を指定するなら`@Column`でnameを指定。
 プロパティ名とカラム名が同一なら`@Column`を付けなくてよい。
+
+`@Transient`アノテーションを付けたプロパティ/フィールドの値はテーブルに保存されない。
 
 ### 複合主キー
 複数のカラムに `@Id` を付ける。複合主キークラスの定義は不要。
