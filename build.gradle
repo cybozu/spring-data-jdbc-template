@@ -9,9 +9,6 @@ version = '1.13.0-SNAPSHOT'
 
 repositories {
     jcenter()
-    maven {
-        url "http://repo.spring.io/milestone/"
-    }
 }
 
 ext {
@@ -20,12 +17,13 @@ ext {
 }
 
 dependencies {
+    compile group: 'org.springframework.data', name: 'spring-data-commons', version: '1.13.10.RELEASE'
+
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 
-    compile group: 'org.springframework.data', name: 'spring-data-commons', version: '1.13.10.RELEASE'
     compile group: 'org.springframework', name: 'spring-jdbc', version: springVersion
     compile group: 'org.springframework', name: 'spring-context', version: springVersion
     compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
