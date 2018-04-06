@@ -20,7 +20,9 @@ ext {
 }
 
 dependencies {
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 
     compile group: 'org.springframework.data', name: 'spring-data-commons', version: '1.13.10.RELEASE'
