@@ -24,11 +24,15 @@ import org.springframework.data.repository.query.QueryLookupStrategy;
 import org.springframework.data.repository.query.RepositoryQuery;
 
 @Slf4j
-public class JdbcTemplateRepositoryFactoryBean<T extends Repository<S, ID>, S, ID extends Serializable> extends
-        RepositoryFactoryBeanSupport<T, S, ID> {
+public class JdbcTemplateRepositoryFactoryBean<T extends Repository<S, ID>, S, ID extends Serializable>
+        extends RepositoryFactoryBeanSupport<T, S, ID> {
 
     @Setter
     private JdbcTemplateRepositoryConfiguration configuration;
+
+    protected JdbcTemplateRepositoryFactoryBean(Class<? extends T> repositoryInterface) {
+        super(repositoryInterface);
+    }
 
     @Override
     protected RepositoryFactorySupport createRepositoryFactory() {

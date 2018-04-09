@@ -72,6 +72,7 @@ public class AnimalRepositoryTest {
                 .values("crested ibis", "Nipponia nippon", "EN").build());
 
         List<Animal> actual = sut.getByNames(Arrays.asList("serval", "crested ibis"));
+        assertThat(actual).hasSize(2);
         assertThat(actual).extracting(e -> e.getId()).allMatch(Objects::nonNull);
         assertThat(actual).extracting(e -> e.getName()).containsExactlyInAnyOrder("serval", "crested ibis");
         assertThat(actual).extracting(e -> e.getScientificName()).containsExactlyInAnyOrder("Leptailurus serval",
