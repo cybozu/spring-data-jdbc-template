@@ -32,4 +32,8 @@ public interface AnimalRepository extends JdbcTemplateRepository<Animal> {
 
     @Query("SELECT * FROM " + Animal.TABLE_NAME + " WHERE status = :status")
     List<Animal> getByStatus(@Param("status") Status status);
+
+    @Query("SELECT scientific_name FROM " + Animal.TABLE_NAME + " WHERE name = :name")
+    @SingleColumn
+    String getScientificNameByName(@Param("name") String name);
 }

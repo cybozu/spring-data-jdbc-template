@@ -171,4 +171,16 @@ public class AnimalRepositoryTest {
         assertThat(animals.get(0).getName()).isEqualTo("serval");
         assertThat(animals.get(0).getStatus()).isEqualTo(Status.LC);
     }
+
+    @Test
+    public void testSingleColumnWithNull() {
+        initDb(insertBuilder().values("unknown", null, "LC").build());
+        assertThat(sut.getScientificNameByName("unknown")).isNull();
+    }
+
+    @Test
+    public void testSingleColumnWithEmpty() {
+        initDb(insertBuilder().values("serval", "Leptailurus serval", "LC").build());
+        assertThat(sut.getScientificNameByName("unknown")).isNull();
+    }
 }
